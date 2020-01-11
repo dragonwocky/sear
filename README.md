@@ -18,7 +18,7 @@ include the file! either download the file from here and include in your own
 assets, or source it from `https://dragonwocky.me/sear/sear.0.4.min.js`.
 
 ```html
-<script src="sear.0.4.min.js"></script>
+<script src="https://dragonwocky.me/sear/sear.0.4.min.js"></script>
 ```
 
 initialise.
