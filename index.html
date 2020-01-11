@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+
+<!--
+Sear.js Documentation
+(c) 2020 dragonwocky <thedragonring.bod@gmail.com>
+(https://dragonwocky.me/) under the MIT License
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sear.js</title>
+    <link rel="icon" href="logo.png" type="image/png" />
+    <meta name="author" content="dragonwocky" />
+    <meta name="theme-color" content="#B20000" />
+
+    <meta name="twitter:site" content="@TheDragonRing" />
+    <meta name="twitter:creator" content="@TheDragonRing" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sear.js" />
+    <meta property="og:url" content="https://dragonwocky.me/sear/" />
+    <meta
+      property="og:description"
+      content="a lightweight reactivity system without a virtual DOM"
+    />
+    <meta property="og:image" content="https://dragonwocky.me/sear/logo.png" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Sear.js" />
+    <meta
+      name="twitter:description"
+      content="a lightweight reactivity system without a virtual DOM"
+    />
+    <meta name="twitter:image" content="https://dragonwocky.me/sear/logo.png" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/styles/github.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', event => {
+        document.querySelectorAll('code').forEach(block => {
+          hljs.highlightBlock(block);
+        });
+      });
+    </script>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="sear.0.4.js"></script>
+    <script>
+      const app = new Sear({
+        el: document.querySelector('#app'),
+        persist: 'Sear/Demo',
+        data: {
+          paragraph: `this is <b>bold</b>.
+      this is <i>italicised</i>.
+      but i? i am <s>struck out</s>.`,
+          selected: 'purple',
+          icecream: {
+            new: '',
+            flavours: ['berry', 'watermelon', '<b>tiramisu</b>']
+          },
+          redselected() {
+            return this.selected === 'red';
+          },
+          colour() {
+            return 'color: ' + this.selected;
+          }
+        },
+        watch: {
+          selected(prev) {
+            console.log(
+              `[watcher] selected colour has changed from ${prev} to ${this.selected}`
+            );
+          },
+          'icecream.flavours'(prev) {
+            const flavours = [...this.icecream.flavours].filter(flavour => {
+              if (prev.includes(flavour)) {
+                prev.splice(prev.indexOf(flavour), 1);
+                return false;
+              }
+              return true;
+            });
+            if (flavours.length) {
+              console.log(
+                `[watcher] flavour(s) added: <${flavours.join('> <')}>`
+              );
+            } else if (prev.length)
+              console.log(
+                `[watcher] flavour(s) removed: <${prev.join('> <')}>`
+              );
+          }
+        }
+      });
+
+      function addflavour() {
+        if (!app.icecream.new) return;
+        app.icecream.flavours = [app.icecream.new, ...app.icecream.flavours];
+        app.icecream.new = '';
+      }
+    </script>
+  </head>
+  <body>
+    <div class="title">
+      <h1>Sear.js</h1>
+      <img src="logo.png" />
+    </div>
+    <div class="centre">
+      <h2 class="subtitle">
+        <a href="https://github.com/dragonwocky/sear">GitHub</a> |
+        <a href="https://github.com/dragonwocky/sear/blob/master/LICENSE"
+          >License</a
+        >
+        |
+        <a href="https://dragonwocky.me/">Author</a>
+      </h2>
+      <h2 class="subtitle">
+        a lightweight (~9 KB minified) reactivity system without a virtual DOM.
+      </h2>
+      <h2 class="subtitle">
+        built from ~50 hours of solid work. likely not to be updated much more
+        (unless it becomes unexpectedly popular): if you need something super
+        high-featured and reliable check out something like
+        <a href="https://vuejs.org/">Vue.js</a> or
+        <a href="https://svelte.dev/">Svelte</a>.
+      </h2>
+      <h2 class="subtitle">
+        that said, this has some decent capabilities, and does the job well
+        enough.
+      </h2>
+      <article id="app">
+        <section class="block" id="declaration" :pre>
+          <h3>app declaration</h3>
+          <p>
+            include the file! either download the file from here and include in
+            your own assets, or source it from
+            <code class="nohighlight"
+              >https://dragonwocky.me/sear/sear.0.4.min.js</code
+            >.
+          </p>
+          <pre><code class="html">&lt;script src="sear.0.4.min.js"&gt;&lt;/script&gt;</code></pre>
+          <p>initialise.</p>
+          <pre><code class="js">const app = new Sear({
+  // whatever element you want to restrict this to
+  // default: document.body
+  el: document.querySelector('#app'),
+  // persist app data to localStorage under this name
+  // default: none, doesn't persist
+  persist: 'Sear/Demo',
+  // any reactive data properties
+  // inc. computed properties
+  data: {},
+  // any functions watching for changes to data
+  watch: {}
+});</code></pre>
+        </section>
+        <section class="block" id="properties" :pre>
+          <h3>properties</h3>
+          <p>
+            basic properties can be objects, arrays, dates, strings, numbers,
+            and boolean values.
+          </p>
+          <pre><code class="js">data: {
+  selected: 'purple',
+  icecream: {
+    flavours: ['berry', 'watermelon', '&lt;b&gt;tiramisu&lt;b&gt;']
+  }
+}</code></pre>
+          <p>
+            these can be updated like any normal object property, or added in
+            later.
+          </p>
+          <pre><code class="js">app.user.selected = 'green';
+app.icecream.new = '';
+app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
+  this is &lt;i&gt;italicised&lt;/i&gt;.
+  but i? i am &lt;s&gt;struck out&lt;/s&gt;.`;</code></pre>
+          <p>
+            computed properties are functions that can return a dynamic value
+            and can access fellow properties via
+            <code class="js">this</code>.
+          </p>
+          <blockquote>
+            to access a computed value, use
+            <code class="js">app.value</code> rather than
+            <code class="js">app.value()</code>.
+          </blockquote>
+          <pre><code class="js">data: {
+  redselected() {
+    return this.selected === 'red';
+  },
+  colour () {
+    return 'color: ' + this.selected;
+  }
+}</code></pre>
+        </section>
+        <section class="block" id="watchers" :pre>
+          <h3>watchers</h3>
+          <p>
+            a watcher function will be evaluated whenever its corresponding data
+            prop is changed. an argument is passed to it with the previous value
+            of that data.
+          </p>
+          <blockquote>
+            due to the way the observation system works, watchers for properties
+            within objects are declared by
+            <code class="js">'parent.child'(prev) {}</code> rather than
+            <code class="js">parent: { child(prev) {} }</code>
+          </blockquote>
+          <pre><code class="js">watch: {
+  selected(prev) {
+    console.log(
+      `[watcher] selected colour has changed from ${prev} to ${this.selected}`
+    );
+  },
+  'icecream.flavours'(prev) {
+    const flavours = [...this.icecream.flavours]
+      .filter(flavour => {
+        if (prev.includes(flavour)) {
+          prev.splice(prev.indexOf(flavour), 1);
+          return false;
+        }
+        return true;
+      });
+    if (flavours.length) {
+      console.log(`[watcher] flavour(s) added: &lt;${flavours.join('&gt; &lt;')}&gt;`);
+    } else if (prev.length)
+      console.log(`[watcher] flavour(s) removed: &lt;${prev.join('&gt; &lt;')}&gt;`);
+  }
+}</code></pre>
+        </section>
+        <section class="block" id="html">
+          <div :pre>
+            <h3>:html</h3>
+            <p>
+              sync the contents of the bound element to a data property.
+              contents will be displayed as HTML.
+            </p>
+            <blockquote>
+              not recommended (unless for e.g. displaying parsed markdown).
+              dynamically rendering untrusted or user-input content could lead
+              to XSS attacks (or other unintended consequences).
+            </blockquote>
+            <pre><code class="html">&lt;p :html="paragraph"&gt;&lt;p&gt;</code></pre>
+          </div>
+          <div class="example">
+            <p :html="paragraph"></p>
+          </div>
+        </section>
+        <section class="block" id="text">
+          <div :pre>
+            <h3>:text</h3>
+            <p>
+              sync the contents of the bound element to a data property.
+              contents will be displayed as plain text.
+            </p>
+            <pre><code class="html">&lt;p :text="paragraph"&gt;&lt;p&gt;</code></pre>
+          </div>
+          <div class="example">
+            <p :text="paragraph"></p>
+          </div>
+        </section>
+        <section class="block" id="moustache">
+          <div :pre>
+            <h3>{{ moustache }}</h3>
+            <p>
+              text binding can also be done via
+              <code class="nohighlight">{{ moustache }}</code> tags.
+            </p>
+            <blockquote>
+              use only in text nodes. use in attributes etc. will make weird
+              things happen.
+            </blockquote>
+            <pre><code class="html">&lt;p&gt;{{ paragraph }}&lt;p&gt;</code></pre>
+          </div>
+          <div class="example">
+            <p>{{ paragraph }}</p>
+          </div>
+        </section>
+        <section class="block" id="value">
+          <div :pre>
+            <h3>:value</h3>
+            <p>
+              sync the value of the bound input to a data property. works for
+              any input (e.g. text, checkbox, select, you name it).
+            </p>
+            <blockquote>
+              use only in text nodes. use in attributes etc. will make weird
+              things happen.
+            </blockquote>
+            <pre><code class="html">&lt;textarea :value="paragraph"&gt;&lt;/textarea&gt;
+  
+&lt;select :value="selected"&gt;
+  &lt;option value="red"&gt;red&lt;/option&gt;
+  &lt;option value="blue"&gt;blue&lt;/option&gt;
+  &lt;option value="green"&gt;green&lt;/option&gt;
+  &lt;option value="purple"&gt;purple&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+          </div>
+          <div class="example">
+            <textarea :value="paragraph"></textarea>
+            <select :value="selected">
+              <option value="red">red</option>
+              <option value="blue">blue</option>
+              <option value="green">green</option>
+              <option value="purple">purple</option>
+            </select>
+          </div>
+        </section>
+        <section class="block" id="unbound">
+          <div :pre>
+            <h3>unbound</h3>
+            <p>
+              use if you want something to be initially populated with a value,
+              but not reactively updated.
+            </p>
+            <pre><code class="html">&lt;p&gt;
+  &lt;b&gt;initial paragraph (as of page load):&lt;/b&gt;
+  &lt;span :text="paragraph" :unbound&gt;&lt;/span&gt;
+&lt;/p&gt;</code></pre>
+          </div>
+          <div class="example">
+            <p>
+              <b>initial paragraph (as of page load):</b>
+              <span :text="paragraph" :unbound></span>
+            </p>
+          </div>
+        </section>
+        <section class="block" id="pre">
+          <div :pre>
+            <h3>:pre</h3>
+            <p>
+              use if you want to preserve everything within that tag - content
+              will not be modified/updated in any way.
+            </p>
+            <pre><code class="html">&lt;p :pre&gt;these {{ tags }} will &lt;span :text="paragraph"&gt;not&lt;/span&gt; be parsed!&lt;/p&gt;</code></pre>
+          </div>
+          <div class="example">
+            <p :pre>
+              these {{ tags }} will <span :text="paragraph">not</span> be
+              parsed!
+            </p>
+          </div>
+        </section>
+        <section class="block" id="each">
+          <div :pre>
+            <h3>:each</h3>
+            <p>
+              repeat an element for each value of an array. assign this
+              attribute to a container, and the first child will be the one
+              repeated within the container.
+            </p>
+            <p>
+              to access the relevant index/id (starting from 1) use
+              <code class="nohighlight">[[:each:id]]</code> and to access the
+              current value use
+              <code class="nohighlight">[[:each:value]]</code>. if the value
+              should be parsed as html (e.g. for displaying markdown), use
+              <code class="nohighlight">[[:each:value:html]]</code>.
+            </p>
+            <pre><code class="html">&lt;div :each="icecream.flavours"&gt;
+  &lt;p&gt;&lt;i&gt;[[:each:id]]&lt;/i&gt;. [[:each:value]]&lt;/p&gt;
+  &lt;button onclick="app.icecream.flavours.splice([[:each:id]] - 1, 1)"&gt;
+    delete
+  &lt;/button&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <div class="example">
+            <div class="sidebyside">
+              <p><b>icecream flavours</b></p>
+              <button onclick="addflavour()">
+                add
+              </button>
+            </div>
+            <input
+              type="text"
+              :value="icecream.new"
+              onkeyup="if (event.key === 'Enter') addflavour()"
+            />
+            <h4>[[:each:value]]</h4>
+            <div :each="icecream.flavours">
+              <div class="sidebyside">
+                <p><i>[[:each:id]]</i>. [[:each:value]]</p>
+                <button
+                  onclick="app.icecream.flavours.splice('[[:each:id]]' - 1, 1)"
+                >
+                  delete
+                </button>
+              </div>
+            </div>
+            <h4>[[:each:value:html]]</h4>
+            <div :each="icecream.flavours">
+              <div class="sidebyside">
+                <p><i>[[:each:id]]</i>. [[:each:value:html]]</p>
+                <button
+                  onclick="app.icecream.flavours.splice('[[:each:id]]' - 1, 1)"
+                >
+                  delete
+                </button>
+              </div>
+            </div>
+          </div>
+          <blockquote :pre>
+            yes, the example above uses more html than in the snippet. this is
+            for css reasons, it doesn't change anything functionality-wise.
+            also, for the "add" button/input.
+            <pre><code class="js">if (app.icecream.new) {
+  app.icecream.flavours = [app.icecream.new, ...app.icecream.flavours];
+  app.icecream.new = '';
+}</code></pre>
+          </blockquote>
+        </section>
+        <section class="block" id="if-else">
+          <div :pre>
+            <h3>:if / :else</h3>
+            <p>
+              with <code class="nohighlight">:if</code>, the element will only
+              be present on the page if the relevant prop has a truthy value.
+            </p>
+            <p>
+              with <code class="nohighlight">:else</code>, the element will only
+              be present on the page if the relevant prop has a falsy value.
+            </p>
+            <pre><code class="html">&lt;p&gt;
+  &lt;b&gt;is red selected?&lt;/b&gt;
+  &lt;span :if="redselected"&gt;yes it is&lt;/span&gt;
+  &lt;span :else="redselected"&gt;no it isn't&lt;/span&gt;
+&lt;/p&gt;</code></pre>
+            <blockquote>
+              uses the <code class="html">&lt;select&gt;</code> from the
+              <a href="#value"><code class="nohighlight">:value</code></a>
+              example above.
+            </blockquote>
+          </div>
+          <div class="example">
+            <select :value="selected">
+              <option value="red">red</option>
+              <option value="blue">blue</option>
+              <option value="green">green</option>
+              <option value="purple">purple</option>
+            </select>
+            <p>
+              <b>is red selected?</b>
+              <span :if="redselected">yes it is</span>
+              <span :else="redselected">no it isn't</span>
+            </p>
+          </div>
+        </section>
+        <section class="block" id="bind-attr">
+          <div :pre>
+            <h3>:bind:attr</h3>
+            <p>use to reactively update/bind any attribute value.</p>
+            <p>
+              values are separated by spaces, written as
+              <code class="nohighlight">condition,response</code>. if there is
+              no <code class="nohighlight">response</code>, it will be assumed
+              to be the value of <code class="nohighlight">condition</code>.
+            </p>
+            <p>
+              if the attribute is boolean, then a truthy
+              <code class="nohighlight">condition</code> will result in the
+              presence of the attribute. a falsy
+              <code class="nohighlight">condition</code> will result in the
+              removal of the attribute. to inverse this, do
+              <code class="nohighlight">condition,false</code>.
+            </p>
+            <blockquote>
+              this is only 1 way (it does not sync). for the
+              <code class="nohighlight">checked</code> attribute of checkboxes,
+              use
+              <a href="#value"><code class="nohighlight">:value</code></a>
+              instead.
+            </blockquote>
+            <pre><code class="html">&lt;p&gt;
+  &lt;input type="checkbox" :bind:disabled="redselected,false" disabled /&gt;
+  &lt;span&gt;(will be disabled if red is not selected)&lt;/span&gt;
+&lt;/p&gt;
+
+&lt;p :bind:style="colour"&gt;i'm {{ selected }}&lt;</code></pre>
+          </div>
+          <blockquote>
+            uses the <code class="html">&lt;select&gt;</code> from the
+            <a href="#value"><code class="nohighlight">:value</code></a> example
+            above.
+          </blockquote>
+          <div class="example">
+            <select :value="selected">
+              <option value="red">red</option>
+              <option value="blue">blue</option>
+              <option value="green">green</option>
+              <option value="purple">purple</option>
+            </select>
+            <p>
+              <input
+                type="checkbox"
+                :bind:disabled="redselected,false"
+                disabled
+              />
+              <span>(will be disabled if red is not selected)</span>
+            </p>
+            <p :bind:style="colour">i'm {{ selected }}</p>
+          </div>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>

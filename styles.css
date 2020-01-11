@@ -1,0 +1,196 @@
+/*
+ * Sear.js Documentation
+ * (c) 2020 dragonwocky <thedragonring.bod@gmail.com>
+ * (https://dragonwocky.me/) under the MIT License
+ */
+
+* {
+  box-sizing: border-box;
+}
+html {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  width: 100%;
+  margin: 0;
+  padding: 1em;
+  background-color: #f7f9f9;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  margin-top: 2.7em;
+}
+.title h1 {
+  text-align: center;
+  font: 2em Courier, monospace;
+  font-weight: 500;
+  margin: calc(0.125em - 2.5px) 0.4em;
+  border-bottom: 5px solid #b20000;
+}
+.title img {
+  width: 2.6em;
+  height: 2.6em;
+  margin: 0 0.4em;
+}
+
+.subtitle {
+  margin: 0.1em;
+  text-align: center;
+  font-size: 1em;
+  width: 70%;
+}
+.subtitle:first-of-type {
+  margin: 1.3em 0;
+}
+
+.centre {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+#app {
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: stretch;
+  align-content: stretch;
+  padding: 1.5em;
+}
+.block {
+  flex-grow: 1;
+  flex-basis: 25%;
+  margin: 1.5em;
+  word-wrap: break-word;
+}
+.example {
+  margin-top: 1em;
+  padding: 1em;
+  background-color: #fbfcfc;
+  box-shadow: 0.4em 0.4em 1em #eee;
+}
+.example p:first-child {
+  margin-top: 0;
+}
+.example p:last-child {
+  margin-bottom: 0;
+}
+
+h3 {
+  margin-top: 0;
+}
+a {
+  color: #b20000;
+  text-decoration: none;
+}
+blockquote {
+  margin-left: 0;
+  padding-left: 1em;
+  border-left: 0.25em solid #e5e7e9;
+}
+code,
+.hljs {
+  padding: 0.5em;
+  background-color: #f2f3f4;
+  border-radius: 5px;
+  word-wrap: break-word;
+  position: relative;
+  max-width: 100%;
+}
+*:not(pre) > .hljs {
+  display: inline;
+}
+pre .hljs {
+  padding: 1.7em;
+}
+pre .hljs::before {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: #ccc;
+  font-size: 0.9em;
+  padding: 0.5em 0.8em;
+}
+pre .hljs.html::before {
+  content: 'HTML';
+}
+pre .hljs.js::before {
+  content: 'JS';
+}
+.hljs-comment {
+  color: #707070;
+}
+
+.line-break {
+  display: block;
+  height: 1em;
+}
+
+textarea,
+select,
+input[type='text'] {
+  width: 100%;
+  font-size: 1em;
+  font-family: 'Nunito Sans', sans-serif;
+  padding: 5px;
+  margin: 5px 0;
+  resize: none;
+}
+button,
+input[type='checkbox'] {
+  outline: none;
+}
+button {
+  font-family: 'Nunito Sans', sans-serif;
+  padding: 0.35em 1.2em;
+  border: none;
+  border-radius: 0.12em;
+  transition: 0.2s;
+  background-color: #eaecee;
+}
+button:hover {
+  color: #fff;
+  background-color: #000;
+}
+
+.sidebyside {
+  display: flex;
+  justify-content: space-around;
+}
+.sidebyside > * {
+  margin: 2.5px;
+}
+.sidebyside :first-child {
+  flex-grow: 1;
+}
+
+@media screen and (max-width: 900px) {
+  #app {
+    width: 100%;
+  }
+  .subtitle {
+    width: 100%;
+    margin: 0.3em;
+  }
+}
+@media screen and (max-width: 800px) {
+  .block {
+    flex-basis: 40%;
+  }
+}
+@media screen and (max-width: 500px) {
+  #app {
+    padding: 0;
+    display: block;
+  }
+}
