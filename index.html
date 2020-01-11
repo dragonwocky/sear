@@ -53,12 +53,20 @@ Sear.js Documentation
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
-    <script src="sear.0.4.js"></script>
+    <script src="sear.0.4.1.js"></script>
     <script>
       const app = new Sear({
         el: document.querySelector('#app'),
         persist: 'Sear/Demo',
+        refresh: 1,
         data: {
+          age: 7,
+          height: 45,
+          idk: {
+            sum() {
+              return this.age + this.height;
+            }
+          },
           paragraph: `this is <b>bold</b>.
       this is <i>italicised</i>.
       but i? i am <s>struck out</s>.`,
@@ -96,6 +104,10 @@ Sear.js Documentation
               console.log(
                 `[watcher] flavour(s) removed: <${prev.join('> <')}>`
               );
+          },
+          idk(prev) {
+            console.log(prev);
+            console.log(this.idk);
           }
         }
       });
@@ -141,10 +153,10 @@ Sear.js Documentation
             include the file! either download the file from github and include
             in your own assets, or source it from
             <code class="nohighlight"
-              >https://dragonwocky.me/sear/sear.0.4.min.js</code
+              >https://dragonwocky.me/sear/sear.0.4.1.min.js</code
             >.
           </p>
-          <pre><code class="html">&lt;script src="https://dragonwocky.me/sear/sear.0.4.min.js"&gt;&lt;/script&gt;</code></pre>
+          <pre><code class="html">&lt;script src="https://dragonwocky.me/sear/sear.0.4.1.min.js"&gt;&lt;/script&gt;</code></pre>
           <p>initialise.</p>
           <pre><code class="js">const app = new Sear({
   // whatever element you want to restrict this to

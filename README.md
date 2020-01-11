@@ -63,7 +63,8 @@ app.paragraph = `this is <b>bold</b>.
 ```
 
 computed properties are functions that can return a dynamic value
-and can access fellow properties via `this`.
+and can access fellow properties via `this`. these cannot be declared
+as arrow functions! (they break persistance and accessing `this`)
 
 > to access a computed value,
 > use `app.value` rather than `app.value()`.
