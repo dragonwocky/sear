@@ -10,7 +10,7 @@ class Sear {
     this._store = options.persist || false;
     if (typeof options.format === 'object')
       this._format = {
-        number: options.format.version,
+        version: options.format.version,
         handler: options.format.handler || function () {
           return {}
         }
@@ -227,7 +227,7 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
       data,
       computed
     };
-    if ('_version' in this) parsed.version = this._version;
+    if ('_format' in this) parsed.version = this._format.version;
     return (localStorage[ident] = JSON.stringify(parsed));
   }
   retrieve(store) {
@@ -235,7 +235,6 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
     try {
       store = JSON.parse(localStorage[store] || '{}');
       if (store && typeof store === 'object') {
-        if ('version' in this && store.version !== this._version) return {};
         store.data = store.data || {};
         store.computed = store.computed || {};
         const process = (obj, path = []) => {
@@ -262,7 +261,9 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
           });
         };
         process(store.computed);
-        return this.deepmerge(store.data, store.computed);
+        const parsed = this.deepmerge(store.data, store.computed);
+        if ('_format' in this && store.version !== this._format.version) return this._format.handler(parsed);
+        return parsed;
       }
     } catch (e) {
       return {};

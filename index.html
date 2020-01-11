@@ -58,7 +58,14 @@ Sear.js Documentation
       const app = new Sear({
         el: document.querySelector('#app'),
         persist: 'Sear/Demo',
-        refresh: 1,
+        format: {
+          version: 3,
+          handler(old) {
+            old.age = old.idk.huh;
+            delete old.idk.huh;
+            return old;
+          }
+        },
         data: {
           age: 7,
           height: 45,
