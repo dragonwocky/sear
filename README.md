@@ -22,11 +22,6 @@ this can massively simplify web app development when used to its fully potential
 enabling (once initialised) you to do in only a couple of lines what you may once
 have needed to write 20 for.
 
-works without a virtual DOM. i'm not sure how they are supposedly faster? even if data is being
-modified on the virtual DOM, the real DOM has still gotta be updated or it's kinda pointless.
-so, why not just work with what you got? by only interacting with what it needs to, rather than
-trying to rebuild a whole DOM, there are no noticeable performance issues.
-
 why should you use this when there are so many other libraries out there promising
 similar things, all of which seem to have massive amounts of support behind them?
 all depends on your use case. they had many things i didn't need nor want, and lacked
