@@ -1,12 +1,47 @@
 # Sear
 
-a lightweight (~9 KB minified) reactivity system without a virtual DOM.
+a lightweight (~9 KB minified), reactive data system.
 
-built from ~50 hours of solid work. likely not to be updated much more (unless it becomes unexpectedly popular):
-if you need something super high-featured and reliable check out something like
-[Vue.js](https://vuejs.org/) or [Svelte](https://svelte.dev/).
+## a what?
 
-that said, this has some decent capabilities, and does the job well enough.
+when building your web app, there are 4 main data sets you deal with.
+
+- visible / the html being displayed
+- script / any javascript variables you may wish to update
+- client-stored / anything persisted on the client side (e.g. localStorage)
+- server-stored / data gained from interactions with the server.
+
+Sear doesn't touch anything to do with the server. there're so many ways data
+transfer between the server and client can be implemented, that's best left to you.
+
+the other 3? Sear takes them all, and gives one single object to interact with
+(from above, script data). you update data within that object, and the other two
+(visible + client-stored) reactively update accordingly (if necessary).
+
+this can massively simplify web app development when used to its fully potential,
+enabling (once initialised) you to do in only a couple of lines what you may once
+have needed to write 20 for.
+
+works without a virtual DOM. i'm not sure how they are supposedly faster? even if data is being
+modified on the virtual DOM, the real DOM has still gotta be updated or it's kinda pointless.
+so, why not just work with what you got? by only interacting with what it needs to, rather than
+trying to rebuild a whole DOM, there are no noticeable performance issues.
+
+built from 50+ hours of solid work. mainly for my own uses, likely not to be updated much more
+(unless it becomes unexpectedly popular).
+
+why should you use this when there are so many other libraries out there promising
+similar things, all of which seem to have massive amounts of support behind them?
+all depends on your use case. they had many things i didn't need nor want, and lacked
+other things i did (without having to install extra libraries). so, i spent ~50 hours
+of my time building something simple but powerful. this doesn't come with the complexities
+of constructing multiple components on the server-side and then learning an extensive api
+to fit everything together. it comes with functionality that does the job without trying
+to do any more.
+
+if you do want something like that, check out [Vue.js](https://vuejs.org/) or
+[Svelte](https://svelte.dev/). otherwise, give Sear a try. it has some decent
+capabilities, and does the job well enough.
 
 ## docs / features
 

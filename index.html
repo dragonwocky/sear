@@ -118,33 +118,100 @@ Sear.js Documentation
     <div class="centre">
       <h2 class="subtitle">
         <a href="https://github.com/dragonwocky/sear">GitHub</a>
-        | <a href="https://github.com/dragonwocky/sear/blob/master/LICENSE">License</a>
-        | <a href="https://github.com/dragonwocky/sear/blob/master/CHANGELOG.md">Changelog (v0.4.1)</a>
-        | <a href="https://github.com/dragonwocky/sear/releases/download/v0.4.1/sear.0.4.1.js">Download</a>
+        |
+        <a href="https://github.com/dragonwocky/sear/blob/master/LICENSE"
+          >License</a
+        >
+        |
+        <a href="https://github.com/dragonwocky/sear/blob/master/CHANGELOG.md"
+          >Changelog (v0.4.1)</a
+        >
+        |
+        <a
+          href="https://github.com/dragonwocky/sear/releases/download/v0.4.1/sear.0.4.1.js"
+          >Download</a
+        >
         | <a href="https://dragonwocky.me/">Author</a>
       </h2>
       <h2 class="subtitle">
-        a lightweight (~9 KB minified) reactivity system without a virtual DOM.
+        a lightweight (~9 KB minified), reactive data system
       </h2>
-      <h2 class="subtitle">
-        built from ~50 hours of solid work. likely not to be updated much more
-        (unless it becomes unexpectedly popular): if you need something super
-        high-featured and reliable check out something like
-        <a href="https://vuejs.org/">Vue.js</a> or
-        <a href="https://svelte.dev/">Svelte</a>.
-      </h2>
-      <h2 class="subtitle">
-        that said, this has some decent capabilities, and does the job well
-        enough.
-      </h2>
+      <section class="description">
+        <h3>a what?</h3>
+        <p>
+          when building your web app, there are 4 main data sets you deal with:
+        </p>
+        <ul>
+          <li>visible / the html being displayed</li>
+          <li>script / any javascript variables you may wish to update</li>
+          <li>
+            client-stored / anything persisted on the client side (e.g.
+            localStorage)
+          </li>
+          <li>
+            server-stored / data gained from interactions with the server.
+          </li>
+        </ul>
+        <p>
+          sear doesn't touch anything to do with the server. there're so many
+          ways data transfer between the server and client can be implemented,
+          that's best left to you.
+        </p>
+        <p>
+          the other 3? sear takes them all, and gives one single object to
+          interact with (from above, script data). you update data within that
+          object, and the other two (visible + client-stored) reactively update
+          accordingly (if necessary).
+        </p>
+        <p>
+          this can massively simplify web app development when used to its fully
+          potential, enabling (once initialised) you to do in only a couple of
+          lines what you may once have needed to write 20 for.
+        </p>
+        <p>
+          works without a virtual DOM. i'm not sure how they are supposedly
+          faster? even if data is being modified on the virtual DOM, the real
+          DOM has still gotta be updated or it's kinda pointless. so, why not
+          just work with what you got? by only interacting with what it needs
+          to, rather than trying to rebuild a whole DOM, there are no noticeable
+          performance issues.
+        </p>
+        <p>
+          built from 50+ hours of solid work. mainly for my own uses, likely not
+          to be updated much more (unless it becomes unexpectedly popular).
+        </p>
+        <p>
+          why should you use this when there are so many other libraries out
+          there promising similar things, all of which seem to have massive
+          amounts of support behind them? all depends on your use case. they had
+          many things i didn't need nor want, and lacked other things i did
+          (without having to install extra libraries). so, i spent ~50 hours of
+          my time building something simple but powerful. this doesn't come with
+          the complexities of constructing multiple components on the
+          server-side and then learning an extensive api to fit everything
+          together. it comes with functionality that does the job without trying
+          to do any more.
+        </p>
+        <p>
+          if you do want something like that, check out
+          <a href="https://vuejs.org/">Vue.js</a> or
+          <a href="https://svelte.dev/">Svelte</a>. otherwise, give sear a try.
+          it has some decent capabilities, and does the job well enough.
+        </p>
+      </section>
       <article id="app">
         <section class="block" id="declaration" :pre>
           <h3>app declaration</h3>
           <p>
             include the file! either download the file from
-            <a href="https://github.com/dragonwocky/sear/releases/download/v0.4.1/sear.0.4.1.js">here</a>
+            <a
+              href="https://github.com/dragonwocky/sear/releases/download/v0.4.1/sear.0.4.1.js"
+              >here</a
+            >
             and include in your own assets, or source it from
-            <code class="nohighlight">https://dragonwocky.me/sear/sear.0.4.1.min.js</code>.
+            <code class="nohighlight"
+              >https://dragonwocky.me/sear/sear.0.4.1.min.js</code
+            >.
           </p>
           <pre><code class="html">&lt;script src="https://dragonwocky.me/sear/sear.0.4.1.min.js"&gt;&lt;/script&gt;</code></pre>
           <p>initialise.</p>

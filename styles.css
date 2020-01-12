@@ -40,6 +40,13 @@ body {
   margin: 0 0.4em;
 }
 
+.centre {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 .subtitle {
   margin: 0.1em;
   text-align: center;
@@ -50,11 +57,10 @@ body {
   margin: 1.3em 0;
 }
 
-.centre {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+.description {
+  width: 70%;
+  padding: 3em 3em 1em 3em;
+  word-wrap: break-word;
 }
 
 #app {
@@ -65,7 +71,7 @@ body {
   justify-content: space-around;
   align-items: stretch;
   align-content: stretch;
-  padding: 1.5em;
+  padding: 0 1.5em 1.5em 1.5em;
 }
 .block {
   flex-grow: 1;
@@ -175,7 +181,8 @@ button:hover {
 }
 
 @media screen and (max-width: 900px) {
-  #app {
+  #app,
+  .description {
     width: 100%;
   }
   .subtitle {
