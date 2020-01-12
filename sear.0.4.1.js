@@ -11,9 +11,11 @@ class Sear {
     if (typeof options.format === 'object')
       this._format = {
         version: options.format.version,
-        handler: options.format.handler || function () {
-          return {}
-        }
+        handler:
+          options.format.handler ||
+          function() {
+            return {};
+          }
       };
     this._raw = this.deepmerge(options.data, this.retrieve(options.persist));
     this._cache = this.clone(this._raw, ['function', undefined]);
@@ -262,7 +264,8 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
         };
         process(store.computed);
         const parsed = this.deepmerge(store.data, store.computed);
-        if ('_format' in this && store.version !== this._format.version) return this._format.handler(parsed);
+        if ('_format' in this && store.version !== this._format.version)
+          return this._format.handler(parsed);
         return parsed;
       }
     } catch (e) {

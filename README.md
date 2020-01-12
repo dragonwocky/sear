@@ -15,10 +15,10 @@ that said, this has some decent capabilities, and does the job well enough.
 #### app declaration
 
 include the file! either download the file from here and include in your own
-assets, or source it from `https://dragonwocky.me/sear/sear.0.4.min.js`.
+assets, or source it from `https://dragonwocky.me/sear/sear.0.4.1.min.js`.
 
 ```html
-<script src="https://dragonwocky.me/sear/sear.0.4.min.js"></script>
+<script src="https://dragonwocky.me/sear/sear.0.4.1.min.js"></script>
 ```
 
 initialise.
@@ -29,8 +29,20 @@ const app = new Sear({
   // default: document.body
   el: document.querySelector('#app'),
   // persist app data to localStorage under this name
-  // default: none, doesn't persist
+  // default: none (doesn't persist)
   persist: 'Sear/Demo',
+  format: {
+    // version of the data structure
+    // default: none (won't check)
+    version: 1,
+    // run this handler if version (above) doesn't match
+    // with the persisted data structure version
+    // args: the old data found in localStorage
+    // default: returns empty object / starts afresh
+    handler: function(old) {
+      return {};
+    }
+  },
   // any reactive data properties
   // inc. computed properties
   data: {},
@@ -63,8 +75,8 @@ app.paragraph = `this is <b>bold</b>.
 ```
 
 computed properties are functions that can return a dynamic value
-and can access fellow properties via `this`. these cannot be declared
-as arrow functions! (they break persistance and accessing `this`)
+and can access fellow properties via `this`. these must not be declared
+as arrow functions! (arrow functions break persistence and accessing `this`)
 
 > to access a computed value,
 > use `app.value` rather than `app.value()`.
@@ -87,7 +99,8 @@ prop is changed. an argument is passed to it with the previous value of that dat
 
 > due to the way the observation system works,
 > watchers for properties within objects are declared by `'parent.child'(prev) {}`
-> rather than `parent: { child(prev) {} }`
+> rather than `parent: { child(prev) {} }`.
+> this allows for watching objects and their properties separately.
 
 ```js
 watch: {

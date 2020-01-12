@@ -1,6 +1,6 @@
-# changelog / release notes
+# changelog + release notes
 
-## [0.4.1] (2020-01-12)
+## [0.4.1] / (2020-01-12)
 
 discovered and fixed library-breaking bug: computed properties within objects
 were not being processed properly.
@@ -12,13 +12,14 @@ added: `format` setting! want to persist data, but have a new set/structure of d
 set a version to check against, and if the data is in an old format, either parse it
 with a custom handler or simply start afresh.
 
-## [0.4] - first release (2020-01-11)
+## [0.4] - first release / (2020-01-11)
 
 transition from function to class.
 massive improvements in code.
 i can't really remember specifically where features came in, but things work now.
 
 brief summary of features:
+
 - limit to element
 - persist to localStorage
 - data: basic types || dates || computed props

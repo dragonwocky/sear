@@ -59,21 +59,9 @@ Sear.js Documentation
         el: document.querySelector('#app'),
         persist: 'Sear/Demo',
         format: {
-          version: 3,
-          handler(old) {
-            old.age = old.idk.huh;
-            delete old.idk.huh;
-            return old;
-          }
+          version: 1
         },
         data: {
-          age: 7,
-          height: 45,
-          idk: {
-            sum() {
-              return this.age + this.height;
-            }
-          },
           paragraph: `this is <b>bold</b>.
       this is <i>italicised</i>.
       but i? i am <s>struck out</s>.`,
@@ -111,10 +99,6 @@ Sear.js Documentation
               console.log(
                 `[watcher] flavour(s) removed: <${prev.join('> <')}>`
               );
-          },
-          idk(prev) {
-            console.log(prev);
-            console.log(this.idk);
           }
         }
       });
@@ -170,8 +154,20 @@ Sear.js Documentation
   // default: document.body
   el: document.querySelector('#app'),
   // persist app data to localStorage under this name
-  // default: none, doesn't persist
+  // default: none (doesn't persist)
   persist: 'Sear/Demo',
+  format: {
+    // version of the data structure
+    // default: none (won't check)
+    version: 1,
+    // run this handler if version (above) doesn't match
+    // with the persisted data structure version
+    // args: the old data found in localStorage
+    // default: returns empty object / starts afresh
+    handler: function (old) {
+      return {};
+    }
+  },
   // any reactive data properties
   // inc. computed properties
   data: {},
@@ -203,7 +199,9 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
           <p>
             computed properties are functions that can return a dynamic value
             and can access fellow properties via
-            <code class="js">this</code>.
+            <code class="js">this</code>. these must not be declared as arrow
+            functions! (arrow functions break persistence and accessing
+            <code class="js">this</code>)
           </p>
           <blockquote>
             to access a computed value, use
@@ -230,7 +228,8 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             due to the way the observation system works, watchers for properties
             within objects are declared by
             <code class="js">'parent.child'(prev) {}</code> rather than
-            <code class="js">parent: { child(prev) {} }</code>
+            <code class="js">parent: { child(prev) {} }</code>. this allows for
+            watching objects and their properties separately.
           </blockquote>
           <pre><code class="js">watch: {
   selected(prev) {
