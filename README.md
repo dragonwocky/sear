@@ -27,9 +27,6 @@ modified on the virtual DOM, the real DOM has still gotta be updated or it's kin
 so, why not just work with what you got? by only interacting with what it needs to, rather than
 trying to rebuild a whole DOM, there are no noticeable performance issues.
 
-built from 50+ hours of solid work. mainly for my own uses, likely not to be updated much more
-(unless it becomes unexpectedly popular).
-
 why should you use this when there are so many other libraries out there promising
 similar things, all of which seem to have massive amounts of support behind them?
 all depends on your use case. they had many things i didn't need nor want, and lacked
