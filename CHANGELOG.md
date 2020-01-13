@@ -2,10 +2,9 @@
 
 ## [unreleased]
 
-- scoping issues need fixing
+- scoping issues need fixing (use static property with IDs stored, similar behaviour to :pre?)
 - ^ if successful, could allow simple implementation of
   components-style feature
-- custom element provision: force id
 
 - limitation: moustache syntax works only for props / cannot be evaluated.
   not a major issue, as computed properties can be used instead. however,
@@ -22,6 +21,13 @@
 
 - limitation: can only handle certain data types. do i bother
   adding support for more? i don't see any reason to (how would parsing to html work?)
+
+note to self: this is growing, need to start optimising some code.
+
+## [0.4.2] / (2020-01-13)
+
+forced provision of element to be more explicit. must provide element as ID string,
+and sear will handle selection.
 
 ## [0.4.1] / (2020-01-12)
 
