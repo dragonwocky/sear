@@ -41,11 +41,11 @@ capabilities, and does the job well enough.
 
 #### app declaration
 
-include the file! either download the file from [here](https://github.com/dragonwocky/sear/releases/download/v0.4.2/sear.0.4.2.js)
-and include in your own assets, or source it from `https://dragonwocky.me/sear/sear.0.4.2.min.js`.
+include the file! either download the file from [here](https://github.com/dragonwocky/sear/releases/download/v0.4.3/sear.0.4.3.js)
+and include in your own assets, or source it from `https://dragonwocky.me/sear/sear.0.4.3.min.js`.
 
 ```html
-<script src="https://dragonwocky.me/sear/sear.0.4.2.min.js"></script>
+<script src="https://dragonwocky.me/sear/sear.0.4.3.min.js"></script>
 ```
 
 initialise.
