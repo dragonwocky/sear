@@ -205,8 +205,9 @@ Sear.js Documentation
           <p>initialise.</p>
           <pre><code class="js">const app = new Sear({
   // whatever element you want to restrict this to
+  // must be passed as a single ID in a string
   // default: document.body
-  el: document.querySelector('#app'),
+  el: '#app',
   // persist app data to localStorage under this name
   // default: none (doesn't persist)
   persist: 'Sear/Demo',

@@ -53,6 +53,7 @@ initialise.
 ```js
 const app = new Sear({
   // whatever element you want to restrict this to
+  // must be passed as a single ID in a string
   // default: document.body
   el: document.querySelector('#app'),
   // persist app data to localStorage under this name
