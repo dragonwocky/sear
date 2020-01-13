@@ -490,7 +490,7 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
           ? html
           : `<span _id="${id}"></span>`;
         el = node.querySelector(`[_id="${id}"]`);
-        parseDOM(el);
+        parent.parseDOM(el);
       }
       update();
       if (!unbound) parent.observe(prop, update);
@@ -506,7 +506,7 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
           ? `<span _id="${id}"></span>`
           : html;
         el = node.querySelector(`[_id="${id}"]`);
-        parseDOM(el);
+        parent.parseDOM(el);
       }
       update();
       if (!unbound) parent.observe(prop, update);
