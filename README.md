@@ -292,21 +292,6 @@ the attribute. to inverse this, do `condition,false`.
 <p :bind:style="colour">i'm {{ selected }}</p>
 ```
 
-## known bugs / possible future features
-
-- should I switch from localStorage to IndexedDB?
-- 2-way binding with `:text` and `:html` (e.g. the content changes and
-  updates the related data prop) is possible/implemented, however code
-  has been commented out due to a) it's buggy with contenteditable -
-  which, hey, why are you using anyway, but b) when would you even
-  practically need this capability?
-- limitation: moustache syntax works only for props / cannot be evaluated.
-  not a major issue, as computed properties can be used instead. however,
-  this is annoying in `:each` loops, as IDs/values cannot be reactively
-  modified before being displayed.
-- limitation: can only handle certain data types (see above). do i bother
-  adding support for more? i don't see any reason to (how would parsing to html work?)
-
 ## license
 
 _reactivity concepts originally learnt from_
