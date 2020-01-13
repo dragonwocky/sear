@@ -1,5 +1,5 @@
 /*
- * Sear.js v0.4
+ * Sear.js v0.4.2
  * (c) 2020 dragonwocky <thedragonring.bod@gmail.com>
  * (https://dragonwocky.me/) under the MIT License
  */

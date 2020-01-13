@@ -24,6 +24,10 @@
 
 note to self: this is growing, need to start optimising some code.
 
+## [0.4.3] / (2020-01-13)
+
+temp fix for: binding within :if / :else breaks due to removal/insertion
+
 ## [0.4.2] / (2020-01-13)
 
 forced provision of element to be more explicit. must provide element as ID string,
