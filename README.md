@@ -2,6 +2,8 @@
 
 a lightweight (~9 KB minified), reactive data system.
 
+_not production ready_
+
 ## a what?
 
 when building your web app, there are 4 main data sets you deal with.
@@ -52,31 +54,54 @@ initialise.
 
 ```js
 const app = new Sear({
-  // whatever element you want to restrict this to
-  // must be passed as a single ID in a string
-  // default: document.body
-  el: document.querySelector('#app'),
-  // persist app data to localStorage under this name
-  // default: none (doesn't persist)
-  persist: 'Sear/Demo',
+  /*
+   * whatever element you want to restrict this to
+   * [type] single ID as a string
+   * [default] document.body
+   */
+  el: '#app',
+
   format: {
-    // version of the data structure
-    // default: none (won't check)
+    /*
+     * persist app data (see below: client) to localStorage under this name
+     * [default] none (doesn't persist)
+     */
+    name: 'Sear/Demo',
+    /*
+     * version of the data structure
+     * [type] string or number
+     * [default] none (won't check)
+     */
     version: 1,
-    // run this handler if version (above) doesn't match
-    // with the persisted data structure version
-    // args: the old data found in localStorage
-    // default: returns empty object / starts afresh
-    handler: function(old) {
+    /*
+     * run this handler if version (above) doesn't match
+     * with the persisted data structure version
+     * [args] old (outdated data found in localStorage), version (of outdated data)
+     * [default] return {}; (starts afresh)
+     */
+    handler(old, version) {
       return {};
     }
   },
-  // any reactive data properties
-  // inc. computed properties
-  data: {},
+
+  /*
+   * any reactive data properties (inc. computed properties)
+   */
+  // data will return to defaults on page reload
+  data: {
+    example: 0,
+    // client data will be persisted to and fetched from localStorage
+    //  -> only works if format.name is defined
+    //  -> (otherwise will act like normal data)
+    client: {}
+  },
+
   // any functions watching for changes to data
   watch: {}
 });
+
+// returns the following
+{ example: 0, client: {} };
 ```
 
 #### properties
@@ -84,20 +109,20 @@ const app = new Sear({
 basic properties can be objects, arrays, dates, strings, numbers, and boolean values.
 
 ```js
-data: {
+data.client: {
   selected: 'purple',
   icecream: {
     flavours: ['berry', 'watermelon', '<b>tiramisu</b>']
   }
-}
+};
 ```
 
 these can be updated like any normal object property, or added in later.
 
 ```js
-app.user.selected = 'green';
-app.icecream.new = '';
-app.paragraph = `this is <b>bold</b>.
+app['client'].user.selected = 'green';
+app['client'].icecream.new = '';
+app['client'].paragraph = `this is <b>bold</b>.
   this is <i>italicised</i>.
   but i? i am <s>struck out</s>.`;
 ```
@@ -110,12 +135,12 @@ as arrow functions! (arrow functions break persistence and accessing `this`)
 > use `app.value` rather than `app.value()`.
 
 ```js
-data: {
+data.client: {
   redselected() {
-    return this.selected === 'red';
+    return this['client']selected === 'red';
   },
   colour () {
-    return 'color: ' + this.selected;
+    return 'color: ' + this['client'].selected;
   }
 }
 ```
@@ -132,13 +157,13 @@ prop is changed. an argument is passed to it with the previous value of that dat
 
 ```js
 watch: {
-  selected(prev) {
+  'client.selected'(prev) {
     console.log(
-      `[watcher] selected colour has changed from ${prev} to ${this.selected}`
+      `[watcher] selected colour has changed from ${prev} to ${this['client'].selected}`
     );
   },
-  'icecream.flavours'(prev) {
-    const flavours = [...this.icecream.flavours]
+  'client.icecream.flavours'(prev) {
+    const flavours = [...this['client'].icecream.flavours]
       .filter(flavour => {
         if (prev.includes(flavour)) {
           prev.splice(prev.indexOf(flavour), 1);
@@ -166,7 +191,7 @@ contents will be displayed as HTML.
 > XSS attacks (or other unintended consequences).
 
 ```html
-<p :html="paragraph"></p>
+<p :html="client.paragraph"></p>
 ```
 
 #### :text
@@ -175,7 +200,7 @@ sync the contents of the bound element to a data property.
 contents will be displayed as plain text.
 
 ```html
-<p :text="paragraph"></p>
+<p :text="client.paragraph"></p>
 ```
 
 #### {{ moustache }}
@@ -185,7 +210,7 @@ text binding can also be done via `{{ moustache }}` tags.
 > use only in text nodes. use in attributes etc. will make weird things happen.
 
 ```html
-<p>{{ paragraph }}</p>
+<p>{{ client.paragraph }}</p>
 ```
 
 #### :value
@@ -194,9 +219,9 @@ sync the value of the bound input to a data property.
 works for any input (e.g. text, checkbox, select, you name it).
 
 ```html
-<textarea :value="paragraph"></textarea>
+<textarea :value="client.paragraph"></textarea>
 
-<select :value="selected">
+<select :value="client.selected">
   <option value="red">red</option>
   <option value="blue">blue</option>
   <option value="green">green</option>
@@ -212,7 +237,7 @@ but not reactively updated.
 ```html
 <p>
   <b>initial paragraph (as of page load):</b>
-  <span :text="paragraph" :unbound></span>
+  <span :text="client.paragraph" :unbound></span>
 </p>
 ```
 
@@ -222,7 +247,9 @@ use if you want to preserve everything within that tag -
 content will not be modified/updated in any way.
 
 ```html
-<p :pre>these {{ tags }} will <span :text="paragraph">not</span> be parsed!</p>
+<p :pre>
+  these {{ tags }} will <span :text="client.paragraph">not</span> be parsed!
+</p>
 ```
 
 #### :each
@@ -236,9 +263,9 @@ to access the current value use `[[:each:value]]`.
 if the value should be parsed as html (e.g. for displaying markdown), use `[[:each:value:html]]`.
 
 ```html
-<div :each="icecream.flavours">
+<div :each="client.icecream.flavours">
   <p><i>[[:each:id]]</i>. [[:each:value]]</p>
-  <button onclick="app.icecream.flavours.splice([[:each:id]] - 1, 1)">
+  <button onclick="app['client'].icecream.flavours.splice([[:each:id]] - 1, 1)">
     delete
   </button>
 </div>
@@ -248,9 +275,9 @@ if the value should be parsed as html (e.g. for displaying markdown), use `[[:ea
 > (assuming you've bound an input via `:value="icecream.new"`):
 >
 > ```js
-> if (app.icecream.new) {
->   app.icecream.flavours = [app.icecream.new, ...app.icecream.flavours];
->   app.icecream.new = '';
+> if (app['client']icecream.new) {
+>   app['client']icecream.flavours = [app['client']icecream.new, ...app['client']icecream.flavours];
+>   app['client']icecream.new = '';
 > }
 > ```
 
@@ -265,8 +292,8 @@ relevant prop has a falsy value.
 ```html
 <p>
   <b>is red selected?</b>
-  <span :if="redselected">yes it is</span>
-  <span :else="redselected">no it isn't</span>
+  <span :if="client.redselected">yes it is</span>
+  <span :else="client.redselected">no it isn't</span>
 </p>
 ```
 
@@ -286,11 +313,11 @@ the attribute. to inverse this, do `condition,false`.
 
 ```html
 <p>
-  <input type="checkbox" :bind:disabled="redselected,false" disabled />
+  <input type="checkbox" :bind:disabled="client.redselected,false" disabled />
   <span>(will be disabled if red is not selected)</span>
 </p>
 
-<p :bind:style="colour">i'm {{ selected }}</p>
+<p :bind:style="client.colour">i'm {{ client.selected }}</p>
 ```
 
 ## license

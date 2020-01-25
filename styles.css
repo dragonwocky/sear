@@ -4,6 +4,48 @@
  * (https://dragonwocky.me/) under the MIT License
  */
 
+:root {
+  --background: #f7f9f9;
+  --inverse: #0e0f0f;
+  --button: #eaecee;
+  --input: #f0f3f4;
+  --colour: #333;
+  --standout: #000;
+  --contrast: #fff;
+  --border: #e5e7e9;
+  --link: #b20000;
+  --shadow: #eee;
+  --box: #fbfcfc;
+  --code: #f2f3f4;
+  --hljs-html: #000080;
+  --hljs-attr: #008080;
+  --hljs-string: #d14;
+  --hljs-builtin: #0086b3;
+  --hljs-keyword: var(--colour);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0e0f0f;
+    --inverse: #f7f9f9;
+    --button: #0a0c0e;
+    --input: var(--button);
+    --colour: #ddd;
+    --standout: #fff;
+    --contrast: #000;
+    --border: #2d2e2f;
+    --link: #f33;
+    --shadow: #070707;
+    --box: #050505;
+    --code: #000;
+    --hljs-html: #46db8c;
+    --hljs-attr: #dd1111;
+    --hljs-string: #abcdef;
+    --hljs-builtin: #926956; /* bd1a79 */
+    --hljs-keyword: #2d8b59;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -16,7 +58,8 @@ body {
   width: 100%;
   margin: 0;
   padding: 1em;
-  background-color: #f7f9f9;
+  color: var(--colour);
+  background-color: var(--background);
   font-family: 'Nunito Sans', sans-serif;
 }
 
@@ -33,6 +76,7 @@ body {
   font-weight: 500;
   margin: calc(0.125em - 2.5px) 0.4em;
   border-bottom: 5px solid #b20000;
+  color: var(--standout);
 }
 .title img {
   width: 2.6em;
@@ -55,6 +99,14 @@ body {
 }
 .subtitle:first-of-type {
   margin: 1.3em 0;
+}
+
+.production-ready {
+  font-size: 0.9em;
+  padding: 0.4em 0.7em;
+  border: 1px solid;
+  font-style: italic;
+  font-weight: 100;
 }
 
 .description {
@@ -82,8 +134,8 @@ body {
 .example {
   margin-top: 1em;
   padding: 1em;
-  background-color: #fbfcfc;
-  box-shadow: 0.4em 0.4em 1em #eee;
+  background-color: var(--box);
+  box-shadow: 0.4em 0.4em 1em var(--shadow);
 }
 .example p:first-child {
   margin-top: 0;
@@ -96,22 +148,26 @@ h3 {
   margin-top: 0;
 }
 a {
-  color: #b20000;
+  color: var(--link);
   text-decoration: none;
+  text-shadow: 1px 1px 1em var(--shadow);
 }
 blockquote {
   margin-left: 0;
   padding-left: 1em;
-  border-left: 0.25em solid #e5e7e9;
+  border-left: 0.25em solid var(--border);
 }
 code,
 .hljs {
   padding: 0.5em;
-  background-color: #f2f3f4;
+  background-color: var(--code);
   border-radius: 5px;
   word-wrap: break-word;
   position: relative;
-  max-width: 100%;
+}
+.hljs {
+  display: block;
+  overflow-x: auto;
 }
 *:not(pre) > .hljs {
   display: inline;
@@ -130,16 +186,75 @@ pre .hljs::before {
 pre .hljs.html::before {
   content: 'HTML';
 }
-pre .hljs.js::before {
+pre .hljs.javascript::before {
   content: 'JS';
 }
-.hljs-comment {
+.hljs-comment,
+.hljs-quote {
   color: #707070;
+  font-style: italic;
 }
-
-.line-break {
-  display: block;
-  height: 1em;
+.hljs-keyword,
+.hljs-selector-tag {
+  color: var(--hljs-keyword);
+  font-weight: bold;
+}
+.hljs-subst {
+  color: var(--colour);
+}
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-attr {
+  color: var(--hljs-attr);
+}
+.hljs-string,
+.hljs-doctag {
+  color: var(--hljs-string);
+}
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+  color: #900;
+  font-weight: bold;
+}
+.hljs-type,
+.hljs-class .hljs-title {
+  color: #458;
+  font-weight: bold;
+}
+.hljs-name,
+.hljs-attribute {
+  color: var(--hljs-html);
+}
+.hljs-regexp,
+.hljs-link {
+  color: #009926;
+}
+.hljs-symbol,
+.hljs-bullet {
+  color: #990073;
+}
+.hljs-built_in,
+.hljs-builtin-name {
+  color: var(--hljs-builtin);
+}
+.hljs-meta {
+  color: #999;
+  font-weight: bold;
+}
+.hljs-deletion {
+  background: #fdd;
+}
+.hljs-addition {
+  background: #dfd;
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: bold;
 }
 
 textarea,
@@ -151,6 +266,9 @@ input[type='text'] {
   padding: 5px;
   margin: 5px 0;
   resize: none;
+  background-color: var(--input);
+  color: var(--colour);
+  border: none;
 }
 button,
 input[type='checkbox'] {
@@ -162,11 +280,12 @@ button {
   border: none;
   border-radius: 0.12em;
   transition: 0.2s;
-  background-color: #eaecee;
+  background-color: var(--button);
+  color: var(--standout);
 }
 button:hover {
-  color: #fff;
-  background-color: #000;
+  color: var(--contrast);
+  background-color: var(--inverse);
 }
 
 .sidebyside {
@@ -191,13 +310,13 @@ button:hover {
   }
 }
 @media screen and (max-width: 800px) {
-  .block {
-    flex-basis: 40%;
+  .description {
+    padding: 1.5em 1.5em 1em 1.5em;
   }
-}
-@media screen and (max-width: 500px) {
   #app {
-    padding: 0;
     display: block;
+  }
+  .block {
+    margin: 0;
   }
 }

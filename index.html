@@ -35,10 +35,6 @@ Sear.js Documentation
     />
     <meta name="twitter:image" content="https://dragonwocky.me/sear/logo.png" />
 
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/styles/github.min.css"
-    />
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', event => {
@@ -49,64 +45,76 @@ Sear.js Documentation
     </script>
 
     <link
-      href="https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap"
+      href="https://fonts.googleapis.com/css?family=Nunito+Sans"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
-    <script src="sear.0.4.3.js"></script>
+    <script src="sear.0.5.js"></script>
     <script>
       const app = new Sear({
         el: '#app',
-        persist: 'Sear/Demo',
         format: {
+          name: 'Sear/Demo',
           version: 1
         },
         data: {
-          paragraph: `this is <b>bold</b>.
-      this is <i>italicised</i>.
-      but i? i am <s>struck out</s>.`,
-          selected: 'purple',
-          icecream: {
-            new: '',
-            flavours: ['berry', 'watermelon', '<b>tiramisu</b>']
-          },
-          redselected() {
-            return this.selected === 'red';
-          },
-          colour() {
-            return 'color: ' + this.selected;
+          example: 0,
+          client: {
+            paragraph: `this is <b>bold</b>.
+            this is <i>italicised</i>.
+            but i? i am <s>struck out</s>.`,
+            selected: 'purple',
+            icecream: {
+              new: '',
+              flavours: ['berry', 'watermelon', '<b>tiramisu</b>']
+            },
+            redselected() {
+              return this['client'].selected === 'red';
+            },
+            colour() {
+              return 'color: ' + this['client'].selected;
+            }
           }
         },
         watch: {
-          selected(prev) {
+          'client.selected'(prev) {
             console.log(
-              `[watcher] selected colour has changed from ${prev} to ${this.selected}`
+              `[watcher] selected colour has changed from ${prev} to ${this['client'].selected}`
             );
           },
-          'icecream.flavours'(prev) {
-            const flavours = [...this.icecream.flavours].filter(flavour => {
-              if (prev.includes(flavour)) {
-                prev.splice(prev.indexOf(flavour), 1);
-                return false;
+          'client.icecream.flavours'(prev) {
+            const flavours = [...this['client'].icecream.flavours].filter(
+              flavour => {
+                if (prev.includes(flavour)) {
+                  prev.splice(prev.indexOf(flavour), 1);
+                  return false;
+                }
+                return true;
               }
-              return true;
-            });
+            );
             if (flavours.length) {
               console.log(
-                `[watcher] flavour(s) added: <${flavours.join('> <')}>`
+                `[watcher] flavour(s) added: &lt;${flavours.join(
+                  '&gt; &lt;'
+                )}&gt;`
               );
             } else if (prev.length)
               console.log(
-                `[watcher] flavour(s) removed: <${prev.join('> <')}>`
+                `[watcher] flavour(s) removed: &lt;${prev.join(
+                  '&gt; &lt;'
+                )}&gt;`
               );
           }
         }
       });
 
       function addflavour() {
-        if (!app.icecream.new) return;
-        app.icecream.flavours = [app.icecream.new, ...app.icecream.flavours];
-        app.icecream.new = '';
+        if (!app['client'].icecream.new) return;
+        app['client'].icecream.flavours = [
+          app['client'].icecream.new,
+          ...app['client'].icecream.flavours
+        ];
+        app['client'].icecream.new = '';
       }
     </script>
   </head>
@@ -124,11 +132,11 @@ Sear.js Documentation
         >
         |
         <a href="https://github.com/dragonwocky/sear/blob/master/CHANGELOG.md"
-          >Changelog (v0.4.3)</a
+          >Changelog (v0.5)</a
         >
         |
         <a
-          href="https://github.com/dragonwocky/sear/releases/download/v0.4.3/sear.0.4.3.js"
+          href="https://github.com/dragonwocky/sear/releases/download/v0.5/sear.0.5.js"
           >Download</a
         >
         | <a href="https://dragonwocky.me/">Author</a>
@@ -136,6 +144,7 @@ Sear.js Documentation
       <h2 class="subtitle">
         a lightweight (~9 KB minified), reactive data system
       </h2>
+      <p class="production-ready">not production ready</p>
       <section class="description" id="a-what">
         <h3>a what?</h3>
         <p>
@@ -193,42 +202,65 @@ Sear.js Documentation
           <p>
             include the file! either download the file from
             <a
-              href="https://github.com/dragonwocky/sear/releases/download/v0.4.3/sear.0.4.3.js"
+              href="https://github.com/dragonwocky/sear/releases/download/v0.5/sear.0.5.js"
               >here</a
             >
             and include in your own assets, or source it from
             <code class="nohighlight"
-              >https://dragonwocky.me/sear/sear.0.4.3.min.js</code
+              >https://dragonwocky.me/sear/sear.0.5.min.js</code
             >.
           </p>
-          <pre><code class="html">&lt;script src="https://dragonwocky.me/sear/sear.0.4.3.min.js"&gt;&lt;/script&gt;</code></pre>
+          <pre><code class="html">&lt;script src="https://dragonwocky.me/sear/sear.0.5.min.js"&gt;&lt;/script&gt;</code></pre>
           <p>initialise.</p>
-          <pre><code class="js">const app = new Sear({
-  // whatever element you want to restrict this to
-  // must be passed as a single ID in a string
-  // default: document.body
+          <pre><code class="javascript">const app = new Sear({
+  /*
+    * whatever element you want to restrict this to
+    * [type] single ID as a string
+    * [default] document.body
+    */
   el: '#app',
-  // persist app data to localStorage under this name
-  // default: none (doesn't persist)
-  persist: 'Sear/Demo',
+
   format: {
-    // version of the data structure
-    // default: none (won't check)
+    /*
+      * persist app data (see below: client) to localStorage under this name
+      * [default] none (doesn't persist)
+      */
+    name: 'Sear/Demo',
+    /*
+      * version of the data structure
+      * [type] string or number
+      * [default] none (won't check)
+      */
     version: 1,
-    // run this handler if version (above) doesn't match
-    // with the persisted data structure version
-    // args: the old data found in localStorage
-    // default: returns empty object / starts afresh
-    handler: function (old) {
+    /*
+      * run this handler if version (above) doesn't match
+      * with the persisted data structure version
+      * [args] old (outdated data found in localStorage), version (of outdated data)
+      * [default] return {}; (starts afresh)
+      */
+    handler(old, version) {
       return {};
     }
   },
-  // any reactive data properties
-  // inc. computed properties
-  data: {},
+
+  /*
+    * any reactive data properties (inc. computed properties)
+    */
+  // data will return to defaults on page reload
+  data: {
+    example: 0,
+    // client data will be persisted to and fetched from localStorage
+    //  -> only works if format.name is defined
+    //  -> (otherwise will act like normal data)
+    client: {}
+  },
+
   // any functions watching for changes to data
   watch: {}
-});</code></pre>
+});
+
+// returns the following
+{ example: 0, client: {} };</code></pre>
         </section>
         <section class="block" id="properties" :pre>
           <h3>properties</h3>
@@ -236,7 +268,7 @@ Sear.js Documentation
             basic properties can be objects, arrays, dates, strings, numbers,
             and boolean values.
           </p>
-          <pre><code class="js">data: {
+          <pre><code class="javascript">data.client: {
   selected: 'purple',
   icecream: {
     flavours: ['berry', 'watermelon', '&lt;b&gt;tiramisu&lt;b&gt;']
@@ -246,29 +278,29 @@ Sear.js Documentation
             these can be updated like any normal object property, or added in
             later.
           </p>
-          <pre><code class="js">app.user.selected = 'green';
-app.icecream.new = '';
-app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
+          <pre><code class="javascript">app['client'].user.selected = 'green';
+app['client'].icecream.new = '';
+app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
   this is &lt;i&gt;italicised&lt;/i&gt;.
   but i? i am &lt;s&gt;struck out&lt;/s&gt;.`;</code></pre>
           <p>
             computed properties are functions that can return a dynamic value
             and can access fellow properties via
-            <code class="js">this</code>. these must not be declared as arrow
-            functions! (arrow functions break persistence and accessing
-            <code class="js">this</code>)
+            <code class="javascript">this</code>. these must not be declared as
+            arrow functions! (arrow functions break persistence and accessing
+            <code class="javascript">this</code>)
           </p>
           <blockquote>
             to access a computed value, use
-            <code class="js">app.value</code> rather than
-            <code class="js">app.value()</code>.
+            <code class="javascript">app['client'].value</code> rather than
+            <code class="javascript">app['client'].value()</code>.
           </blockquote>
-          <pre><code class="js">data: {
+          <pre><code class="javascript">data.client: {
   redselected() {
-    return this.selected === 'red';
+    return this['client'].selected === 'red';
   },
   colour () {
-    return 'color: ' + this.selected;
+    return 'color: ' + this['client'].selected;
   }
 }</code></pre>
         </section>
@@ -282,18 +314,18 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
           <blockquote>
             due to the way the observation system works, watchers for properties
             within objects are declared by
-            <code class="js">'parent.child'(prev) {}</code> rather than
-            <code class="js">parent: { child(prev) {} }</code>. this allows for
-            watching objects and their properties separately.
+            <code class="javascript">'parent.child'(prev) {}</code> rather than
+            <code class="javascript">parent: { child(prev) {} }</code>. this
+            allows for watching objects and their properties separately.
           </blockquote>
-          <pre><code class="js">watch: {
-  selected(prev) {
+          <pre><code class="javascript">watch: {
+  'client.selected'(prev) {
     console.log(
-      `[watcher] selected colour has changed from ${prev} to ${this.selected}`
+      `[watcher] selected colour has changed from ${prev} to ${this['client'].selected}`
     );
   },
-  'icecream.flavours'(prev) {
-    const flavours = [...this.icecream.flavours]
+  'client.icecream.flavours'(prev) {
+    const flavours = [...this['client'].icecream.flavours]
       .filter(flavour => {
         if (prev.includes(flavour)) {
           prev.splice(prev.indexOf(flavour), 1);
@@ -320,10 +352,10 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
               dynamically rendering untrusted or user-input content could lead
               to XSS attacks (or other unintended consequences).
             </blockquote>
-            <pre><code class="html">&lt;p :html="paragraph"&gt;&lt;p&gt;</code></pre>
+            <pre><code class="html">&lt;p :html="client.paragraph"&gt;&lt;p&gt;</code></pre>
           </div>
           <div class="example">
-            <p :html="paragraph"></p>
+            <p :html="client.paragraph"></p>
           </div>
         </section>
         <section class="block" id="text">
@@ -333,10 +365,10 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
               sync the contents of the bound element to a data property.
               contents will be displayed as plain text.
             </p>
-            <pre><code class="html">&lt;p :text="paragraph"&gt;&lt;p&gt;</code></pre>
+            <pre><code class="html">&lt;p :text="client.paragraph"&gt;&lt;p&gt;</code></pre>
           </div>
           <div class="example">
-            <p :text="paragraph"></p>
+            <p :text="client.paragraph"></p>
           </div>
         </section>
         <section class="block" id="moustache">
@@ -350,10 +382,10 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
               use only in text nodes. use in attributes etc. will make weird
               things happen.
             </blockquote>
-            <pre><code class="html">&lt;p&gt;{{ paragraph }}&lt;p&gt;</code></pre>
+            <pre><code class="html">&lt;p&gt;{{ client.paragraph }}&lt;p&gt;</code></pre>
           </div>
           <div class="example">
-            <p>{{ paragraph }}</p>
+            <p>{{ client.paragraph }}</p>
           </div>
         </section>
         <section class="block" id="value">
@@ -367,9 +399,9 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
               use only in text nodes. use in attributes etc. will make weird
               things happen.
             </blockquote>
-            <pre><code class="html">&lt;textarea :value="paragraph"&gt;&lt;/textarea&gt;
+            <pre><code class="html">&lt;textarea :value="client.paragraph"&gt;&lt;/textarea&gt;
   
-&lt;select :value="selected"&gt;
+&lt;select :value="client.selected"&gt;
   &lt;option value="red"&gt;red&lt;/option&gt;
   &lt;option value="blue"&gt;blue&lt;/option&gt;
   &lt;option value="green"&gt;green&lt;/option&gt;
@@ -377,8 +409,8 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
 &lt;/select&gt;</code></pre>
           </div>
           <div class="example">
-            <textarea :value="paragraph"></textarea>
-            <select :value="selected">
+            <textarea :value="client.paragraph"></textarea>
+            <select :value="client.selected">
               <option value="red">red</option>
               <option value="blue">blue</option>
               <option value="green">green</option>
@@ -395,13 +427,13 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             </p>
             <pre><code class="html">&lt;p&gt;
   &lt;b&gt;initial paragraph (as of page load):&lt;/b&gt;
-  &lt;span :text="paragraph" :unbound&gt;&lt;/span&gt;
+  &lt;span :text="client.paragraph" :unbound&gt;&lt;/span&gt;
 &lt;/p&gt;</code></pre>
           </div>
           <div class="example">
             <p>
               <b>initial paragraph (as of page load):</b>
-              <span :text="paragraph" :unbound></span>
+              <span :text="client.paragraph" :unbound></span>
             </p>
           </div>
         </section>
@@ -412,11 +444,11 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
               use if you want to preserve everything within that tag - content
               will not be modified/updated in any way.
             </p>
-            <pre><code class="html">&lt;p :pre&gt;these {{ tags }} will &lt;span :text="paragraph"&gt;not&lt;/span&gt; be parsed!&lt;/p&gt;</code></pre>
+            <pre><code class="html">&lt;p :pre&gt;these {{ tags }} will &lt;span :text="client.paragraph"&gt;not&lt;/span&gt; be parsed!&lt;/p&gt;</code></pre>
           </div>
           <div class="example">
             <p :pre>
-              these {{ tags }} will <span :text="paragraph">not</span> be
+              these {{ tags }} will <span :text="client.paragraph">not</span> be
               parsed!
             </p>
           </div>
@@ -437,9 +469,9 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
               should be parsed as html (e.g. for displaying markdown), use
               <code class="nohighlight">[[:each:value:html]]</code>.
             </p>
-            <pre><code class="html">&lt;div :each="icecream.flavours"&gt;
+            <pre><code class="html">&lt;div :each="client.icecream.flavours"&gt;
   &lt;p&gt;&lt;i&gt;[[:each:id]]&lt;/i&gt;. [[:each:value]]&lt;/p&gt;
-  &lt;button onclick="app.icecream.flavours.splice([[:each:id]] - 1, 1)"&gt;
+  &lt;button onclick="app['client'].icecream.flavours.splice([[:each:id]] - 1, 1)"&gt;
     delete
   &lt;/button&gt;
 &lt;/div&gt;</code></pre>
@@ -453,26 +485,26 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             </div>
             <input
               type="text"
-              :value="icecream.new"
+              :value="client.icecream.new"
               onkeyup="if (event.key === 'Enter') addflavour()"
             />
             <h4>[[:each:value]]</h4>
-            <div :each="icecream.flavours">
+            <div :each="client.icecream.flavours">
               <div class="sidebyside">
                 <p><i>[[:each:id]]</i>. [[:each:value]]</p>
                 <button
-                  onclick="app.icecream.flavours.splice('[[:each:id]]' - 1, 1)"
+                  onclick="app['client'].icecream.flavours.splice('[[:each:id]]' - 1, 1)"
                 >
                   delete
                 </button>
               </div>
             </div>
             <h4>[[:each:value:html]]</h4>
-            <div :each="icecream.flavours">
+            <div :each="client.icecream.flavours">
               <div class="sidebyside">
                 <p><i>[[:each:id]]</i>. [[:each:value:html]]</p>
                 <button
-                  onclick="app.icecream.flavours.splice('[[:each:id]]' - 1, 1)"
+                  onclick="app['client'].icecream.flavours.splice('[[:each:id]]' - 1, 1)"
                 >
                   delete
                 </button>
@@ -483,9 +515,9 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             yes, the example above uses more html than in the snippet. this is
             for css reasons, it doesn't change anything functionality-wise.
             also, for the "add" button/input.
-            <pre><code class="js">if (app.icecream.new) {
-  app.icecream.flavours = [app.icecream.new, ...app.icecream.flavours];
-  app.icecream.new = '';
+            <pre><code class="javascript">if (app['client'].icecream.new) {
+  app['client'].icecream.flavours = [app['client'].icecream.new, ...app['client'].icecream.flavours];
+  app['client'].icecream.new = '';
 }</code></pre>
           </blockquote>
         </section>
@@ -502,8 +534,8 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             </p>
             <pre><code class="html">&lt;p&gt;
   &lt;b&gt;is red selected?&lt;/b&gt;
-  &lt;span :if="redselected"&gt;yes it is&lt;/span&gt;
-  &lt;span :else="redselected"&gt;no it isn't&lt;/span&gt;
+  &lt;span :if="client.redselected"&gt;yes it is&lt;/span&gt;
+  &lt;span :else="client.redselected"&gt;no it isn't&lt;/span&gt;
 &lt;/p&gt;</code></pre>
             <blockquote>
               uses the <code class="html">&lt;select&gt;</code> from the
@@ -512,7 +544,7 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             </blockquote>
           </div>
           <div class="example">
-            <select :value="selected">
+            <select :value="client.selected">
               <option value="red">red</option>
               <option value="blue">blue</option>
               <option value="green">green</option>
@@ -520,8 +552,8 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             </select>
             <p>
               <b>is red selected?</b>
-              <span :if="redselected">yes it is</span>
-              <span :else="redselected">no it isn't</span>
+              <span :if="client.redselected">yes it is</span>
+              <span :else="client.redselected">no it isn't</span>
             </p>
           </div>
         </section>
@@ -551,7 +583,7 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
               instead.
             </blockquote>
             <pre><code class="html">&lt;p&gt;
-  &lt;input type="checkbox" :bind:disabled="redselected,false" disabled /&gt;
+  &lt;input type="checkbox" :bind:disabled="client.redselected,false" disabled /&gt;
   &lt;span&gt;(will be disabled if red is not selected)&lt;/span&gt;
 &lt;/p&gt;
 
@@ -563,7 +595,7 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             above.
           </blockquote>
           <div class="example">
-            <select :value="selected">
+            <select :value="client.selected">
               <option value="red">red</option>
               <option value="blue">blue</option>
               <option value="green">green</option>
@@ -572,7 +604,7 @@ app.paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             <p>
               <input
                 type="checkbox"
-                :bind:disabled="redselected,false"
+                :bind:disabled="client.redselected,false"
                 disabled
               />
               <span>(will be disabled if red is not selected)</span>

@@ -1,6 +1,6 @@
 # changelog + release notes
 
-## [unreleased]
+## [todo]
 
 - scoping issues need fixing (use static property with IDs stored, similar behaviour to :pre?)
 - ^ if successful, could allow simple implementation of
@@ -23,6 +23,16 @@
   adding support for more? i don't see any reason to (how would parsing to html work?)
 
 note to self: this is growing, need to start optimising some code.
+
+## [0.5] / (unreleased)
+
+format change: persisted data -> `data.client` (inc. move of `persist` -> `format.name`)
+
+improve caching managment of computed props
+
+unbreak element binding when element no longer exists
+
+improvements of helper functions (e.g. `isEqual` -> `compare`)
 
 ## [0.4.3] / (2020-01-13)
 
