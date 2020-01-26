@@ -29,7 +29,7 @@ class Sear {
         super(...args);
         this.__proto__.path = path;
         this.__proto__.parent = parent;
-        for (let method in [
+        for (let method of [
           'copyWithin',
           'fill',
           'pop',
@@ -40,9 +40,7 @@ class Sear {
           'unshift',
           'splice'
         ])
-          this[method] = function(...args) {
-            return this._update(method, ...args);
-          };
+          this[method] = (...args) => this._update(method, ...args);
       }
       _update(type, ...args) {
         const duplicate = Array.from(this),
