@@ -7,14 +7,20 @@
 :root {
   --background: #f7f9f9;
   --inverse: #0e0f0f;
+
+  --border: #e5e7e9;
+  --shadow: #eee;
+  --glow: transparent;
+
   --button: #eaecee;
   --input: #f0f3f4;
+
   --colour: #333;
   --standout: #000;
   --contrast: #fff;
-  --border: #e5e7e9;
   --link: #b20000;
-  --shadow: #eee;
+  --menu-weight: bold;
+
   --box: #fbfcfc;
   --code: #f2f3f4;
   --hljs-html: #000080;
@@ -22,20 +28,27 @@
   --hljs-string: #d14;
   --hljs-builtin: #0086b3;
   --hljs-keyword: var(--colour);
+  --hljs-comment: #707070;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0e0f0f;
     --inverse: #f7f9f9;
+
+    --border: #2d2e2f;
+    --shadow: #070707;
+    --glow: #b20000;
+
     --button: #0a0c0e;
     --input: var(--button);
+
     --colour: #ddd;
     --standout: #fff;
     --contrast: #000;
-    --border: #2d2e2f;
     --link: #f33;
-    --shadow: #070707;
+    --menu-weight: normal;
+
     --box: #050505;
     --code: #000;
     --hljs-html: #46db8c;
@@ -43,6 +56,7 @@
     --hljs-string: #abcdef;
     --hljs-builtin: #926956; /* bd1a79 */
     --hljs-keyword: #2d8b59;
+    --hljs-comment: #a0a0a0;
   }
 }
 
@@ -82,6 +96,7 @@ body {
   width: 2.6em;
   height: 2.6em;
   margin: 0 0.4em;
+  filter: drop-shadow(0 0 0.75em var(--glow));
 }
 
 .centre {
@@ -99,6 +114,16 @@ body {
 }
 .subtitle:first-of-type {
   margin: 1.3em 0;
+}
+.subtitle a {
+  padding: 0 0.25em;
+  font-weight: var(--menu-weight);
+}
+.subtitle a:not(:first-child) {
+  margin-left: 0.25em;
+}
+.subtitle a:not(:last-child) {
+  border-right: 0.1em solid var(--colour);
 }
 
 .production-ready {
@@ -150,7 +175,7 @@ h3 {
 a {
   color: var(--link);
   text-decoration: none;
-  text-shadow: 1px 1px 1em var(--shadow);
+  text-shadow: 0 0 0.75em var(--glow);
 }
 blockquote {
   margin-left: 0;
@@ -172,8 +197,12 @@ code,
 *:not(pre) > .hljs {
   display: inline;
 }
+pre {
+  position: relative;
+}
 pre .hljs {
-  padding: 1.7em;
+  padding: 1.8em;
+  position: static;
 }
 pre .hljs::before {
   position: absolute;
@@ -191,7 +220,7 @@ pre .hljs.javascript::before {
 }
 .hljs-comment,
 .hljs-quote {
-  color: #707070;
+  color: var(--hljs-comment);
   font-style: italic;
 }
 .hljs-keyword,

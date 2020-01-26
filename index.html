@@ -38,16 +38,11 @@ Sear.js Documentation
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', event => {
-        document.querySelectorAll('code').forEach(block => {
-          hljs.highlightBlock(block);
-        });
+        document.querySelectorAll('code').forEach(hljs.highlightBlock);
       });
     </script>
 
-    <link
-      href="https://fonts.googleapis.com/css?family=Nunito+Sans"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <script src="sear.0.5.js"></script>
     <script>
@@ -67,13 +62,13 @@ Sear.js Documentation
             icecream: {
               new: '',
               flavours: ['berry', 'watermelon', '<b>tiramisu</b>']
-            },
-            redselected() {
-              return this['client'].selected === 'red';
-            },
-            colour() {
-              return 'color: ' + this['client'].selected;
             }
+          },
+          redselected() {
+            return this['client'].selected === 'red';
+          },
+          colour() {
+            return 'color: ' + this['client'].selected;
           }
         },
         watch: {
@@ -83,26 +78,20 @@ Sear.js Documentation
             );
           },
           'client.icecream.flavours'(prev) {
-            const flavours = [...this['client'].icecream.flavours].filter(
-              flavour => {
-                if (prev.includes(flavour)) {
-                  prev.splice(prev.indexOf(flavour), 1);
-                  return false;
-                }
-                return true;
+            const flavours = [...this['client'].icecream.flavours].filter(flavour => {
+              if (prev.includes(flavour)) {
+                prev.splice(prev.indexOf(flavour), 1);
+                return false;
               }
-            );
+              return true;
+            });
             if (flavours.length) {
               console.log(
-                `[watcher] flavour(s) added: &lt;${flavours.join(
-                  '&gt; &lt;'
-                )}&gt;`
+                `[watcher] flavour(s) added: &lt;${flavours.join('&gt; &lt;')}&gt;`
               );
             } else if (prev.length)
               console.log(
-                `[watcher] flavour(s) removed: &lt;${prev.join(
-                  '&gt; &lt;'
-                )}&gt;`
+                `[watcher] flavour(s) removed: &lt;${prev.join('&gt; &lt;')}&gt;`
               );
           }
         }
@@ -125,21 +114,21 @@ Sear.js Documentation
     </div>
     <div class="centre">
       <h2 class="subtitle">
-        <a href="https://github.com/dragonwocky/sear">GitHub</a>
-        |
-        <a href="https://github.com/dragonwocky/sear/blob/master/LICENSE"
-          >License</a
-        >
-        |
-        <a href="https://github.com/dragonwocky/sear/blob/master/CHANGELOG.md"
-          >Changelog (v0.5)</a
-        >
-        |
-        <a
-          href="https://github.com/dragonwocky/sear/releases/download/v0.5/sear.0.5.js"
-          >Download</a
-        >
-        | <a href="https://dragonwocky.me/">Author</a>
+        <a href="https://github.com/dragonwocky/sear">
+          GitHub
+        </a>
+        <a href="https://github.com/dragonwocky/sear/blob/master/LICENSE">
+          License
+        </a>
+        <a href="https://github.com/dragonwocky/sear/blob/master/CHANGELOG.md">
+          Changelog (v0.5)
+        </a>
+        <a href="https://github.com/dragonwocky/sear/releases/download/v0.5/sear.0.5.js">
+          Download
+        </a>
+        <a href="https://dragonwocky.me/">
+          Author
+        </a>
       </h2>
       <h2 class="subtitle">
         a lightweight (~9 KB minified), reactive data system
@@ -154,46 +143,43 @@ Sear.js Documentation
           <li>visible / the html being displayed</li>
           <li>script / any javascript variables you may wish to update</li>
           <li>
-            client-stored / anything persisted on the client side (e.g.
-            localStorage)
+            client-stored / anything persisted on the client side (e.g. localStorage)
           </li>
           <li>
             server-stored / data gained from interactions with the server.
           </li>
         </ul>
         <p>
-          sear doesn't touch anything to do with the server. there're so many
-          ways data transfer between the server and client can be implemented,
-          that's best left to you.
+          sear doesn't touch anything to do with the server. there're so many ways data
+          transfer between the server and client can be implemented, that's best left to
+          you.
         </p>
         <p>
-          the other 3? sear takes them all, and gives one single object to
-          interact with (from above, script data). you update data within that
-          object, and the other two (visible + client-stored) reactively update
-          accordingly (if necessary).
+          the other 3? sear takes them all, and gives one single object to interact with
+          (from above, script data). you update data within that object, and the other two
+          (visible + client-stored) reactively update accordingly (if necessary).
         </p>
         <p>
           this can massively simplify web app development when used to its fully
-          potential, enabling (once initialised) you to do in only a couple of
-          lines what you may once have needed to write 20 for.
+          potential, enabling (once initialised) you to do in only a couple of lines what
+          you may once have needed to write 20 for.
         </p>
         <p>
-          why should you use this when there are so many other libraries out
-          there promising similar things, all of which seem to have massive
-          amounts of support behind them? all depends on your use case. they had
-          many things i didn't need nor want, and lacked other things i did
-          (without having to install extra libraries). so, i spent ~50 hours of
-          my time building something simple but powerful. this doesn't come with
-          the complexities of constructing multiple components on the
-          server-side and then learning an extensive api to fit everything
-          together. it comes with functionality that does the job without trying
-          to do any more.
+          why should you use this when there are so many other libraries out there
+          promising similar things, all of which seem to have massive amounts of support
+          behind them? all depends on your use case. they had many things i didn't need
+          nor want, and lacked other things i did (without having to install extra
+          libraries). so, i spent ~50 hours of my time building something simple but
+          powerful. this doesn't come with the complexities of constructing multiple
+          components on the server-side and then learning an extensive api to fit
+          everything together. it comes with functionality that does the job without
+          trying to do any more.
         </p>
         <p>
           if you do want something like that, check out
           <a href="https://vuejs.org/">Vue.js</a> or
-          <a href="https://svelte.dev/">Svelte</a>. otherwise, give sear a try.
-          it has some decent capabilities, and does the job well enough.
+          <a href="https://svelte.dev/">Svelte</a>. otherwise, give sear a try. it has
+          some decent capabilities, and does the job well enough.
         </p>
       </section>
       <article id="app">
@@ -206,9 +192,7 @@ Sear.js Documentation
               >here</a
             >
             and include in your own assets, or source it from
-            <code class="nohighlight"
-              >https://dragonwocky.me/sear/sear.0.5.min.js</code
-            >.
+            <code class="nohighlight">https://dragonwocky.me/sear/sear.0.5.min.js</code>.
           </p>
           <pre><code class="html">&lt;script src="https://dragonwocky.me/sear/sear.0.5.min.js"&gt;&lt;/script&gt;</code></pre>
           <p>initialise.</p>
@@ -265,8 +249,8 @@ Sear.js Documentation
         <section class="block" id="properties" :pre>
           <h3>properties</h3>
           <p>
-            basic properties can be objects, arrays, dates, strings, numbers,
-            and boolean values.
+            basic properties can be objects, arrays, dates, strings, numbers, and boolean
+            values.
           </p>
           <pre><code class="javascript">data.client: {
   selected: 'purple',
@@ -275,8 +259,7 @@ Sear.js Documentation
   }
 }</code></pre>
           <p>
-            these can be updated like any normal object property, or added in
-            later.
+            these can be updated like any normal object property, or added in later.
           </p>
           <pre><code class="javascript">app['client'].user.selected = 'green';
 app['client'].icecream.new = '';
@@ -284,10 +267,10 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
   this is &lt;i&gt;italicised&lt;/i&gt;.
   but i? i am &lt;s&gt;struck out&lt;/s&gt;.`;</code></pre>
           <p>
-            computed properties are functions that can return a dynamic value
-            and can access fellow properties via
-            <code class="javascript">this</code>. these must not be declared as
-            arrow functions! (arrow functions break persistence and accessing
+            computed properties are functions that can return a dynamic value and can
+            access fellow properties via
+            <code class="javascript">this</code>. these must not be declared as arrow
+            functions! (arrow functions break persistence and accessing
             <code class="javascript">this</code>)
           </p>
           <blockquote>
@@ -295,7 +278,7 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             <code class="javascript">app['client'].value</code> rather than
             <code class="javascript">app['client'].value()</code>.
           </blockquote>
-          <pre><code class="javascript">data.client: {
+          <pre><code class="javascript">data: {
   redselected() {
     return this['client'].selected === 'red';
   },
@@ -307,16 +290,15 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
         <section class="block" id="watchers" :pre>
           <h3>watchers</h3>
           <p>
-            a watcher function will be evaluated whenever its corresponding data
-            prop is changed. an argument is passed to it with the previous value
-            of that data.
+            a watcher function will be evaluated whenever its corresponding data prop is
+            changed. an argument is passed to it with the previous value of that data.
           </p>
           <blockquote>
-            due to the way the observation system works, watchers for properties
-            within objects are declared by
+            due to the way the observation system works, watchers for properties within
+            objects are declared by
             <code class="javascript">'parent.child'(prev) {}</code> rather than
-            <code class="javascript">parent: { child(prev) {} }</code>. this
-            allows for watching objects and their properties separately.
+            <code class="javascript">parent: { child(prev) {} }</code>. this allows for
+            watching objects and their properties separately.
           </blockquote>
           <pre><code class="javascript">watch: {
   'client.selected'(prev) {
@@ -344,13 +326,13 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
           <div :pre>
             <h3>:html</h3>
             <p>
-              sync the contents of the bound element to a data property.
-              contents will be displayed as HTML.
+              sync the contents of the bound element to a data property. contents will be
+              displayed as HTML.
             </p>
             <blockquote>
-              not recommended (unless for e.g. displaying parsed markdown).
-              dynamically rendering untrusted or user-input content could lead
-              to XSS attacks (or other unintended consequences).
+              not recommended (unless for e.g. displaying parsed markdown). dynamically
+              rendering untrusted or user-input content could lead to XSS attacks (or
+              other unintended consequences).
             </blockquote>
             <pre><code class="html">&lt;p :html="client.paragraph"&gt;&lt;p&gt;</code></pre>
           </div>
@@ -362,8 +344,8 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
           <div :pre>
             <h3>:text</h3>
             <p>
-              sync the contents of the bound element to a data property.
-              contents will be displayed as plain text.
+              sync the contents of the bound element to a data property. contents will be
+              displayed as plain text.
             </p>
             <pre><code class="html">&lt;p :text="client.paragraph"&gt;&lt;p&gt;</code></pre>
           </div>
@@ -379,8 +361,8 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
               <code class="nohighlight">{{ moustache }}</code> tags.
             </p>
             <blockquote>
-              use only in text nodes. use in attributes etc. will make weird
-              things happen.
+              use only in text nodes. use in attributes etc. will make weird things
+              happen.
             </blockquote>
             <pre><code class="html">&lt;p&gt;{{ client.paragraph }}&lt;p&gt;</code></pre>
           </div>
@@ -392,12 +374,12 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
           <div :pre>
             <h3>:value</h3>
             <p>
-              sync the value of the bound input to a data property. works for
-              any input (e.g. text, checkbox, select, you name it).
+              sync the value of the bound input to a data property. works for any input
+              (e.g. text, checkbox, select, you name it).
             </p>
             <blockquote>
-              use only in text nodes. use in attributes etc. will make weird
-              things happen.
+              use only in text nodes. use in attributes etc. will make weird things
+              happen.
             </blockquote>
             <pre><code class="html">&lt;textarea :value="client.paragraph"&gt;&lt;/textarea&gt;
   
@@ -422,8 +404,8 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
           <div :pre>
             <h3>unbound</h3>
             <p>
-              use if you want something to be initially populated with a value,
-              but not reactively updated.
+              use if you want something to be initially populated with a value, but not
+              reactively updated.
             </p>
             <pre><code class="html">&lt;p&gt;
   &lt;b&gt;initial paragraph (as of page load):&lt;/b&gt;
@@ -441,15 +423,14 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
           <div :pre>
             <h3>:pre</h3>
             <p>
-              use if you want to preserve everything within that tag - content
-              will not be modified/updated in any way.
+              use if you want to preserve everything within that tag - content will not be
+              modified/updated in any way.
             </p>
             <pre><code class="html">&lt;p :pre&gt;these {{ tags }} will &lt;span :text="client.paragraph"&gt;not&lt;/span&gt; be parsed!&lt;/p&gt;</code></pre>
           </div>
           <div class="example">
             <p :pre>
-              these {{ tags }} will <span :text="client.paragraph">not</span> be
-              parsed!
+              these {{ tags }} will <span :text="client.paragraph">not</span> be parsed!
             </p>
           </div>
         </section>
@@ -457,15 +438,14 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
           <div :pre>
             <h3>:each</h3>
             <p>
-              repeat an element for each value of an array. assign this
-              attribute to a container, and the first child will be the one
-              repeated within the container.
+              repeat an element for each value of an array. assign this attribute to a
+              container, and the first child will be the one repeated within the
+              container.
             </p>
             <p>
               to access the relevant index/id (starting from 1) use
-              <code class="nohighlight">[[:each:id]]</code> and to access the
-              current value use
-              <code class="nohighlight">[[:each:value]]</code>. if the value
+              <code class="nohighlight">[[:each:id]]</code> and to access the current
+              value use <code class="nohighlight">[[:each:value]]</code>. if the value
               should be parsed as html (e.g. for displaying markdown), use
               <code class="nohighlight">[[:each:value:html]]</code>.
             </p>
@@ -512,9 +492,9 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             </div>
           </div>
           <blockquote :pre>
-            yes, the example above uses more html than in the snippet. this is
-            for css reasons, it doesn't change anything functionality-wise.
-            also, for the "add" button/input.
+            yes, the example above uses more html than in the snippet. this is for css
+            reasons, it doesn't change anything functionality-wise. also, for the "add"
+            button/input.
             <pre><code class="javascript">if (app['client'].icecream.new) {
   app['client'].icecream.flavours = [app['client'].icecream.new, ...app['client'].icecream.flavours];
   app['client'].icecream.new = '';
@@ -525,17 +505,17 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
           <div :pre>
             <h3>:if / :else</h3>
             <p>
-              with <code class="nohighlight">:if</code>, the element will only
-              be present on the page if the relevant prop has a truthy value.
+              with <code class="nohighlight">:if</code>, the element will only be present
+              on the page if the relevant prop has a truthy value.
             </p>
             <p>
-              with <code class="nohighlight">:else</code>, the element will only
-              be present on the page if the relevant prop has a falsy value.
+              with <code class="nohighlight">:else</code>, the element will only be
+              present on the page if the relevant prop has a falsy value.
             </p>
             <pre><code class="html">&lt;p&gt;
   &lt;b&gt;is red selected?&lt;/b&gt;
-  &lt;span :if="client.redselected"&gt;yes it is&lt;/span&gt;
-  &lt;span :else="client.redselected"&gt;no it isn't&lt;/span&gt;
+  &lt;span :if="redselected"&gt;yes it is&lt;/span&gt;
+  &lt;span :else="redselected"&gt;no it isn't&lt;/span&gt;
 &lt;/p&gt;</code></pre>
             <blockquote>
               uses the <code class="html">&lt;select&gt;</code> from the
@@ -552,8 +532,8 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             </select>
             <p>
               <b>is red selected?</b>
-              <span :if="client.redselected">yes it is</span>
-              <span :else="client.redselected">no it isn't</span>
+              <span :if="redselected">yes it is</span>
+              <span :else="redselected">no it isn't</span>
             </p>
           </div>
         </section>
@@ -563,36 +543,33 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
             <p>use to reactively update/bind any attribute value.</p>
             <p>
               values are separated by spaces, written as
-              <code class="nohighlight">condition,response</code>. if there is
-              no <code class="nohighlight">response</code>, it will be assumed
-              to be the value of <code class="nohighlight">condition</code>.
+              <code class="nohighlight">condition=response</code>. if there is no
+              <code class="nohighlight">response</code>, it will be assumed to be the
+              value of <code class="nohighlight">condition</code>.
             </p>
             <p>
               if the attribute is boolean, then a truthy
-              <code class="nohighlight">condition</code> will result in the
-              presence of the attribute. a falsy
-              <code class="nohighlight">condition</code> will result in the
-              removal of the attribute. to inverse this, do
-              <code class="nohighlight">condition,false</code>.
+              <code class="nohighlight">condition</code> will result in the presence of
+              the attribute. a falsy <code class="nohighlight">condition</code> will
+              result in the removal of the attribute. to inverse this, do
+              <code class="nohighlight">condition=false</code>.
             </p>
             <blockquote>
               this is only 1 way (it does not sync). for the
-              <code class="nohighlight">checked</code> attribute of checkboxes,
-              use
+              <code class="nohighlight">checked</code> attribute of checkboxes, use
               <a href="#value"><code class="nohighlight">:value</code></a>
               instead.
             </blockquote>
             <pre><code class="html">&lt;p&gt;
-  &lt;input type="checkbox" :bind:disabled="client.redselected,false" disabled /&gt;
+  &lt;input type="checkbox" :bind:disabled="redselected=false" disabled /&gt;
   &lt;span&gt;(will be disabled if red is not selected)&lt;/span&gt;
 &lt;/p&gt;
 
-&lt;p :bind:style="colour"&gt;i'm {{ selected }}&lt;</code></pre>
+&lt;p :bind:style="colour"&gt;i'm {{ client.selected }}&lt;</code></pre>
           </div>
           <blockquote>
             uses the <code class="html">&lt;select&gt;</code> from the
-            <a href="#value"><code class="nohighlight">:value</code></a> example
-            above.
+            <a href="#value"><code class="nohighlight">:value</code></a> example above.
           </blockquote>
           <div class="example">
             <select :value="client.selected">
@@ -602,14 +579,10 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
               <option value="purple">purple</option>
             </select>
             <p>
-              <input
-                type="checkbox"
-                :bind:disabled="client.redselected,false"
-                disabled
-              />
+              <input type="checkbox" :bind:disabled="redselected=false" disabled />
               <span>(will be disabled if red is not selected)</span>
             </p>
-            <p :bind:style="colour">i'm {{ selected }}</p>
+            <p :bind:style="colour">i'm {{ client.selected }}</p>
           </div>
         </section>
       </article>

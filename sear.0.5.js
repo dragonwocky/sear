@@ -6,97 +6,55 @@
 
 'use strict';
 class Sear {
-  ObservableArray = class ObservableArray extends Array {
-    constructor(args, path, parent) {
-      super(...args);
-      this.__proto__.path = path;
-      this.__proto__.parent = parent;
-    }
-    _update(type, ...args) {
-      const duplicate = Array.from(this),
-        update = duplicate[type](...args);
-      this.__proto__.parent.set(
-        this.__proto__.parent._proxied,
-        this.__proto__.path,
-        duplicate
-      );
-      return update;
-    }
-    copyWithin(...args) {
-      return this._update('copyWithin', ...args);
-    }
-    fill(...args) {
-      return this._update('fill', ...args);
-    }
-    pop(...args) {
-      return this._update('pop', ...args);
-    }
-    push(...args) {
-      return this._update('push', ...args);
-    }
-    reverse(...args) {
-      return this._update('reverse', ...args);
-    }
-    sort(...args) {
-      return this._update('sort', ...args);
-    }
-    shift(...args) {
-      return this._update('shift', ...args);
-    }
-    unshift(...args) {
-      return this._update('unshift', ...args);
-    }
-    splice(...args) {
-      return this._update('splice', ...args);
-    }
-  };
-  booleanAttributes = [
-    'async',
-    'autofocus',
-    'autoplay',
-    'checked',
-    'contenteditable',
-    'controls',
-    'default',
-    'defer',
-    'disabled',
-    'formnovalidate',
-    'frameborder',
-    'hidden',
-    'ismap',
-    'itemscope',
-    'loop',
-    'multiple',
-    'muted',
-    'nomodule',
-    'novalidate',
-    'open',
-    'readonly',
-    'required',
-    'reversed',
-    'scoped',
-    'selected',
-    'typemustmatch'
-  ];
-
   constructor(options) {
-    this._format =
-      typeof options.format === 'object'
-        ? {
-            name: options.format.name || false,
-            version: options.format.version,
-            handler:
-              options.format.handler ||
-              function() {
-                return {};
-              }
+    this._format = {};
+    if (options.format.version) {
+      this._format = {
+        version: options.format.version,
+        handler:
+          options.format.handler ||
+          function() {
+            return {};
           }
-        : {};
+      };
+    }
+    if (options.format.name) this._format.name = options.format.name;
     this._raw = this.deepmerge(options.data, {
       client: this.retrieve(this._format.name)
     });
-    this._cache = this.clone(this._raw, ['function', undefined]);
+    this._cache = this.clone(this._raw, { function: () => undefined });
 
+    this.ObservableArray = class ObservableArray extends Array {
+      constructor(args, path, parent) {
+        super(...args);
+        this.__proto__.path = path;
+        this.__proto__.parent = parent;
+        for (let method in [
+          'copyWithin',
+          'fill',
+          'pop',
+          'push',
+          'reverse',
+          'sort',
+          'shift',
+          'unshift',
+          'splice'
+        ])
+          this[method] = function(...args) {
+            return this._update(method, ...args);
+          };
+      }
+      _update(type, ...args) {
+        const duplicate = Array.from(this),
+          update = duplicate[type](...args);
+        this.__proto__.parent.set(
+          this.__proto__.parent._proxied,
+          this.__proto__.path,
+          duplicate
+        );
+        return update;
+      }
+    };
     this._dependency = {
       // current evaluation
       targets: [null],
@@ -108,26 +66,50 @@ class Sear {
       Object.keys(obj).forEach(key => {
         if (typeof obj[key] === 'object' && !Array.isArray(obj[key]))
           return loadcomputed(obj[key], [...path, key]);
-        if (typeof obj[key] === 'function')
-          this.get(this._proxied, [...path, key]);
+        if (typeof obj[key] === 'function') this.get(this._proxied, [...path, key]);
       });
     };
     loadcomputed(this._raw);
 
     this._signals = {};
     this._watchers = options.watch || {};
-    for (let key in this._watchers)
-      if (this._watchers.hasOwnProperty(key)) {
-        if (typeof this._watchers[key] !== 'function')
-          throw new Error(
-            `[Sear] Watchers must be functions! Offender: <${key}>`
-          );
-        this.observe(key, this._watchers[key].bind(this._proxied));
-        this.get(this._proxied, key);
-      }
+    for (let key in this._watchers) {
+      if (typeof this._watchers[key] != 'function')
+        throw new Error(`[Sear] Watchers must be functions! Offender: <${key}>`);
+      this.observe(key, this._watchers[key].bind(this._proxied));
+      this.get(this._proxied, key);
+    }
 
     this._elemIDs = [];
     this._preserve = {};
+    this.booleanAttributes = [
+      'async',
+      'autofocus',
+      'autoplay',
+      'checked',
+      'contenteditable',
+      'controls',
+      'default',
+      'defer',
+      'disabled',
+      'formnovalidate',
+      'frameborder',
+      'hidden',
+      'ismap',
+      'itemscope',
+      'loop',
+      'multiple',
+      'muted',
+      'nomodule',
+      'novalidate',
+      'open',
+      'readonly',
+      'required',
+      'reversed',
+      'scoped',
+      'selected',
+      'typemustmatch'
+    ];
     document.addEventListener('DOMContentLoaded', () => {
       if ('el' in options) {
         if (
@@ -152,10 +134,7 @@ Element must be passed as a single ID in a string (e.g. '#app').`
   }
 
   compare(itemA, itemB) {
-    if (
-      typeof itemA !== typeof itemB ||
-      Array.isArray(itemA) !== Array.isArray(itemB)
-    )
+    if (typeof itemA != typeof itemB || Array.isArray(itemA) != Array.isArray(itemB))
       return false;
     if (typeof itemA === 'object') {
       if (Array.isArray(itemA)) {
@@ -163,14 +142,8 @@ Element must be passed as a single ID in a string (e.g. '#app').`
         for (let i = 0; i < itemA.length; i++)
           if (!this.compare(itemA[i], itemB[i])) return false;
       } else {
-        if (Object.keys(itemA).length !== Object.keys(itemB).length)
-          return false;
-        for (let key in itemA)
-          if (
-            itemA.hasOwnProperty(key) &&
-            !this.compare(itemA[key], itemB[key])
-          )
-            return false;
+        if (Object.keys(itemA).length !== Object.keys(itemB).length) return false;
+        for (let key in itemA) if (!this.compare(itemA[key], itemB[key])) return false;
       }
     } else {
       if (typeof itemA === 'function') {
@@ -189,30 +162,25 @@ Element must be passed as a single ID in a string (e.g. '#app').`
           this.set(merged, [...path, key], obj[key]);
         });
       };
-    objs.forEach(obj => process(obj));
+    objs.forEach(obj => process(this.clone(obj)));
     return merged;
   }
-  // from https://stackoverflow.com/questions/728360/how-do-i-correctly-clone-a-javascript-object
+  // modified from https://stackoverflow.com/questions/728360/how-do-i-correctly-clone-a-javascript-object
   clone(obj, intercept) {
     let copy;
-    if (intercept && typeof obj === intercept[0]) return intercept[1];
-    if (obj == null || typeof obj != 'object') return obj;
-    if (obj instanceof Date) {
-      copy = new Date();
-      copy.setTime(obj.getTime());
-      return copy;
-    }
+    if (typeof intercept === 'object')
+      for (let [type, callback] of Object.entries(intercept))
+        if (typeof obj === type) return callback(obj);
+    if (obj === null || typeof obj != 'object') return obj;
+    if (obj instanceof Date) return new Date(new Date().setTime(obj.getTime()));
     if (Array.isArray(obj)) {
       copy = [];
-      for (let i = 0; i < obj.length; i++)
-        copy[i] = this.clone(obj[i], intercept);
+      for (let i = 0; i < obj.length; i++) copy[i] = this.clone(obj[i], intercept);
       return copy;
     }
     if (obj.constructor === Object) {
       copy = {};
-      for (let attr in obj)
-        if (obj.hasOwnProperty(attr))
-          copy[attr] = this.clone(obj[attr], intercept);
+      for (let attr in obj) copy[attr] = this.clone(obj[attr], intercept);
       return copy;
     }
     throw new Error(
@@ -244,7 +212,7 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
       data,
       computed
     };
-    if ('_format' in this) parsed.version = this._format.version;
+    if ('version' in this._format) parsed.version = this._format.version;
     return (localStorage[ident] = JSON.stringify(parsed));
   }
   retrieve(store) {
@@ -256,31 +224,30 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
         store.computed = store.computed || {};
         const process = (obj, path = []) => {
           Object.keys(obj).forEach(key => {
-            if (typeof obj[key] === 'object')
-              return process(obj[key], [...path, key]);
-            try {
-              return eval(
-                `this.set(store.computed, [...path, key], (${
-                  obj[key].startsWith('function') ? '' : 'function'
-                } ${obj[key]})`
-              );
-            } catch (e) {
-              return this.set(
-                store.computed,
-                [...path, key],
-                new Function(
-                  `return (${
+            if (typeof obj[key] === 'object') return process(obj[key], [...path, key]);
+            /* eval is faster, but not necessary
+              try {
+                return eval(
+                  `this.set(store.computed, [...path, key], (${
                     obj[key].startsWith('function') ? '' : 'function'
                   } ${obj[key]})`
-                )()
-              );
-            }
+                );
+              } catch (e) {}
+            */
+            return this.set(
+              store.computed,
+              [...path, key],
+              new Function(
+                `return (${obj[key].startsWith('function') ? '' : 'function'} ${
+                  obj[key]
+                })`
+              )()
+            );
           });
         };
         process(store.computed);
         const parsed = this.deepmerge(store.data, store.computed);
-        if ('_format' in this && store.version !== this._format.version)
-          return this._format.handler(parsed);
+        if (store.version !== this._format.version) return this._format.handler(parsed);
         return parsed;
       }
     } catch (e) {
@@ -312,67 +279,39 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
   }
 
   trapper(path = []) {
-    const parent = this;
+    const $ = this;
     return {
       get(obj, prop) {
         if (!(prop in obj)) return undefined;
         const id = [...path, prop].join('.'),
-          target =
-            parent._dependency.targets[parent._dependency.targets.length - 1];
+          target = $._dependency.targets[$._dependency.targets.length - 1],
+          tracking = $._dependency.tracking[target];
         if (typeof obj[prop] === 'function') {
-          if (target && !parent._dependency.tracking[target].includes(id))
-            parent._dependency.tracking[target].push(id);
-          parent._dependency.targets.push(id);
-          let value = parent.get(parent._raw, id);
-          if (!parent.get(parent._cache, id)) {
-            parent._dependency.tracking[id] = [];
-            parent.set(
-              parent._cache,
-              id,
-              parent.clone(obj[prop].call(parent._proxied))
-            );
+          if (target && !tracking.includes(id)) tracking.push(id);
+          $._dependency.targets.push(id);
+          if (!$.get($._cache, id)) {
+            $._dependency.tracking[id] = [];
+            $.set($._cache, id, $.clone(obj[prop].call($._proxied)));
           }
-          if (typeof value === 'function')
-            value = parent.get(parent._cache, id);
-          parent._dependency.targets.pop();
-          return value;
+          $._dependency.targets.pop();
+          return $.get($._cache, id);
         } else {
-          if (target && !parent._dependency.tracking[target].includes(id))
-            parent._dependency.tracking[target].push(id);
-
+          if (target && !tracking.includes(id)) tracking.push(id);
           if (Array.isArray(obj[prop]))
-            return new parent.ObservableArray(
-              obj[prop],
-              [...path, prop],
-              parent
-            );
+            return new $.ObservableArray(obj[prop], [...path, prop], $);
           if (typeof obj[prop] === 'object' && obj[prop] !== null)
-            return new Proxy(obj[prop], parent.trapper([...path, prop]));
+            return new Proxy(obj[prop], $.trapper([...path, prop]));
           return obj[prop];
         }
       },
       set(obj, prop, value) {
-        if (parent.compare(obj[prop], value)) return true;
-        const id = [...path, prop].join('.');
+        if ($.compare(obj[prop], value)) return true;
         obj[prop] = value;
-        Object.keys(parent._dependency.tracking).forEach(key => {
-          if (parent._dependency.tracking[key].includes(id)) parent.notify(key);
+        Object.keys($._dependency.tracking).forEach(key => {
+          if ($._dependency.tracking[key].includes([...path, prop].join('.')))
+            $.notify(key);
         });
-        parent.notify([...path, prop]);
-        return true;
-      }
-    };
-  }
-  arraytrapper(path = []) {
-    const parent = this;
-    return {
-      get(obj, prop) {
-        return obj[prop];
-      },
-      set(obj, prop, value) {
-        if (parent.compare(obj[prop], value)) return true;
-        obj[prop] = value;
-        parent.notify([...path]);
+        $.notify([...path, prop]);
         return true;
       }
     };
@@ -410,200 +349,188 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
     } else id = el.attributes['_id'].value;
     return id;
   }
+  reactive(container, el) {
+    if (!container || !el) return undefined;
+    return {
+      id: this.eID(el),
+      node() {
+        return container.querySelector(`[_id="${this.id}"]`);
+      }
+    };
+  }
   parseDOM(node = this._frame) {
     if (node === document) node = node.body;
-    const parent = this;
 
     // take out preserved elems during parsing
     node.querySelectorAll('[\\:pre]').forEach(el => {
-      const id = parent.eID(el);
-      parent._preserve[id] = el.outerHTML;
+      const id = this.eID(el);
+      if (this._preserve[id]) return;
+      this._preserve[id] = el.outerHTML;
       el.outerHTML = `<span :pre _id="${id}"></span>`;
     });
 
-    // moustache! (or mustache for the americans, i guess)
-    node.innerHTML = node.innerHTML.replace(
-      /{{([^{}]+)}}/g,
-      '<span :text="$1"></span>'
-    );
-
+    // moustache!
+    node.innerHTML = node.innerHTML.replace(/{{([^{}]+)}}/g, '<span :text="$1"></span>');
     node.querySelectorAll('[\\:text]').forEach(el => {
-      const id = parent.eID(el),
-        prop = el.attributes[':text'].value.trim();
-      el.textContent = parent.get(parent._proxied, prop);
-      if (!el.attributes[':unbound']) {
-        parent.observe(prop, () => {
-          document.querySelector(`#${id}`).textContent = parent.get(
-            parent._proxied,
-            prop
-          );
-        });
-      }
+      el = this.reactive(node, el);
+      const prop = el.node().attributes[':text'].value.trim(),
+        update = () => {
+          if (!el.node()) return;
+          el.node().textContent = this.get(this._proxied, prop);
+        };
+      if (!el.node().attributes[':unbound']) this.observe(prop, update);
+      update();
     });
     node.querySelectorAll('[\\:html]').forEach(el => {
-      const id = parent.eID(el),
-        prop = el.attributes[':html'].value.trim();
-      el.innerHTML = parent.get(parent._proxied, prop);
-      parent.parseDOM(el);
-      if (!el.attributes[':unbound']) {
-        parent.observe(prop, () => {
-          document.querySelector(`#${id}`).innerHTML = parent.get(
-            parent._proxied,
-            prop
-          );
-        });
-      }
+      el = this.reactive(node, el);
+      const prop = el.node().attributes[':html'].value.trim(),
+        update = () => {
+          if (!el.node()) return;
+          el.node().innerHTML = this.get(this._proxied, prop);
+          this.parseDOM(el.node());
+        };
+      if (!el.node().attributes[':unbound']) this.observe(prop, update);
+      update();
     });
     node.querySelectorAll('[\\:value]').forEach(el => {
-      const prop = el.attributes[':value'].value.trim();
-      let value = parent.get(parent._proxied, prop);
-      if (
-        el.attributes['type'] &&
-        ['radio', 'checkbox'].includes(el.attributes['type'].value.trim())
-      ) {
-        el.checked = value ? value : false;
-        if (!el.attributes[':unbound']) {
-          parent.observe(prop, () => {
-            value = parent.get(parent._proxied, prop);
-            el.checked = value ? value : false;
-          });
-          el.onchange = event =>
-            parent.set(parent._proxied, prop, event.target.checked);
-        }
-      } else {
-        el.value = value;
-        if (!el.attributes[':unbound']) {
-          parent.observe(
-            prop,
-            () => (el.value = parent.get(parent._proxied, prop))
-          );
-          el.oninput = event =>
-            parent.set(parent._proxied, prop, event.target.value);
-        }
-      }
-    });
-
-    // unnecessary? can be done via
-    // :bind:style="condition,display:inline" style="display:none"
-    node.querySelectorAll('[\\:if]').forEach(el => {
-      const prop = el.attributes[':if'].value.trim(),
-        id = parent.eID(el),
-        html = el.outerHTML,
-        unbound = el.attributes[':unbound'];
-      function update() {
-        let elem = node.querySelector(`[_id="${id}"]`);
-        if (!elem) return;
-        const val = parent.get(parent._proxied, prop);
-        elem.outerHTML = (val.length
-        ? val.length
-        : val == true)
-          ? html
-          : `<span _id="${id}"></span>`;
-        elem = node.querySelector(`[_id="${id}"]`);
-        parent.parseDOM(elem);
-      }
+      el = this.reactive(node, el);
+      const prop = el.node().attributes[':value'].value.trim(),
+        update = () => {
+          if (!el.node()) return;
+          if (['radio', 'checkbox'].includes(el.node().type)) {
+            el.node().checked = this.get(this._proxied, prop) == true;
+            el.node().onchange = event =>
+              this.set(this._proxied, prop, event.target.checked);
+          } else {
+            el.node().value = this.get(this._proxied, prop);
+            el.node().oninput = event =>
+              this.set(this._proxied, prop, event.target.value);
+          }
+        };
+      if (!el.node().attributes[':unbound']) this.observe(prop, update);
       update();
-      if (!unbound) parent.observe(prop, update);
-    });
-    // :bind:style="condition,display:none" style="display:inline"
-    node.querySelectorAll('[\\:else]').forEach(el => {
-      const prop = el.attributes[':else'].value.trim(),
-        id = parent.eID(el),
-        html = el.outerHTML,
-        unbound = el.attributes[':unbound'];
-      function update() {
-        let elem = node.querySelector(`[_id="${id}"]`);
-        if (!elem) return;
-        const val = parent.get(parent._proxied, prop);
-        elem.outerHTML = (val.length
-        ? val.length
-        : val == true)
-          ? `<span _id="${id}"></span>`
-          : html;
-        elem = node.querySelector(`[_id="${id}"]`);
-        parent.parseDOM(elem);
-      }
-      update();
-      if (!unbound) parent.observe(prop, update);
     });
 
     node.querySelectorAll('[\\:each]').forEach(el => {
-      const prop = el.attributes[':each'].value.trim(),
-        html = el.firstElementChild.cloneNode(true);
-      function update() {
-        const array = parent.get(parent._proxied, prop);
-        if (!array) return;
-        el.innerHTML = '';
-        for (let i = 0; i < array.length; i++) {
-          const child = html.cloneNode(true);
-          child.innerHTML = child.innerHTML
-            .replace(/\[\[:each:id]]/g, i + 1)
-            .replace(/\[\[:each:value:html]]/g, array[i]);
-          parent.parseDOM(child);
-          child.innerHTML = child.innerHTML.replace(
-            /\[\[:each:value]]/g,
-            '<span :each:value></span>'
-          );
-          child
-            .querySelectorAll('[\\:each\\:value]')
-            .forEach(elem => (elem.textContent = array[i]));
-          el.appendChild(child);
-        }
-      }
+      el = this.reactive(node, el);
+      const prop = el.node().attributes[':each'].value.trim(),
+        content = el.node().firstElementChild.cloneNode(true),
+        update = () => {
+          if (!el.node()) return;
+          el.node().innerHTML = '';
+          const array = this.get(this._proxied, prop);
+          if (!Array.isArray(array)) return;
+          for (let i = 0; i < array.length; i++) {
+            const child = content.cloneNode(true);
+            child.innerHTML = child.innerHTML
+              .replace(/\[\[:each:id]]/g, i + 1)
+              .replace(/\[\[:each:value:html]]/g, array[i]);
+            this.parseDOM(child);
+            child.innerHTML = child.innerHTML.replace(
+              /\[\[:each:value]]/g,
+              '<span :each:value></span>'
+            );
+            child
+              .querySelectorAll('[\\:each\\:value]')
+              .forEach(elem => (elem.textContent = array[i]));
+            el.node().appendChild(child);
+          }
+        };
+      if (!el.node().attributes[':unbound']) this.observe(prop, update);
       update();
-      if (!el.attributes[':unbound']) parent.observe(prop, update);
     });
 
     // :bind:attr
     Array.from(node.getElementsByTagName('*'))
       .filter(el => {
         const attr = Array.from(el.attributes);
-        for (let j = 0; j < attr.length; j++)
-          if (/^:bind:.+/.test(attr[j].name)) return true;
+        for (let i = 0; i < attr.length; i++)
+          if (/^:bind:.+/.test(attr[i].name)) return true;
         return false;
       })
       .forEach(el => {
-        const hardset = {};
-        Array.from(el.attributes)
+        el = this.reactive(node, el);
+        const initial = {};
+        Array.from(el.node().attributes)
           .filter(attr => /^:bind:.+/.test(attr.name))
           .forEach(attr => {
             const name = attr.name.slice(6),
               props = attr.value
                 .trim()
                 .split(' ')
-                .map(prop => prop.split(','));
-            if (el.attributes[name]) hardset[name] = el.attributes[name].value;
-            function update() {
+                .map(prop => prop.split('='));
+            if (el.node().attributes[name])
+              initial[name] = el.node().attributes[name].value;
+            const update = () => {
+              if (!el.node()) return;
               let value = props
                 .map(prop => {
-                  const val = parent.get(parent._proxied, prop[0]);
+                  const val = this.get(this._proxied, prop[0]);
                   if (prop[1]) return val ? prop[1] : undefined;
                   return val;
                 })
                 .filter(prop => ![null, undefined].includes(prop))
                 .join(' ');
-              if (value) {
-                if (parent.booleanAttributes.includes(name)) {
-                  if (['false', false].includes(value))
-                    return el.removeAttribute(name);
-                  return el.setAttribute(name, true);
+              if (value !== '') {
+                if (this.booleanAttributes.includes(name)) {
+                  if (value.trim() === 'false') return el.node().removeAttribute(name);
+                  return el.node().setAttribute(name, true);
                 }
-                if (hardset[name]) value = hardset[name] + ' ' + value;
-                return el.setAttribute(name, value);
+                return el
+                  .node()
+                  .setAttribute(name, `${initial[name] ? initial[name] : ''} ${value}`);
               }
-              if (![null, undefined].includes(hardset[name]))
-                return el.setAttribute(name, hardset[name]);
-              el.removeAttribute(name);
-            }
+              if (![null, undefined].includes(initial[name]))
+                return el.node().setAttribute(name, initial[name]);
+              el.node().removeAttribute(name);
+            };
+            if (!el.node().attributes[':unbound'])
+              props.forEach(prop => this.observe(prop[0], update));
             update();
-            if (!el.attributes[':unbound'])
-              props.forEach(prop => parent.observe(prop[0], update));
           });
       });
+
+    // unnecessary? can be done via
+    // :bind:style="condition,display:inline" style="display:none"
+    node.querySelectorAll('[\\:if]').forEach(el => {
+      el = this.reactive(node, el);
+      const prop = el.node().attributes[':if'].value.trim(),
+        content = el.node().outerHTML,
+        update = () => {
+          if (!el.node()) return;
+          const value = this.get(this._proxied, prop);
+          el.node().outerHTML = (value.length
+          ? value.length
+          : value == true)
+            ? content
+            : `<span _id="${el.id}"></span>`;
+          this.parseDOM(el.node());
+        };
+      if (!el.node().attributes[':unbound']) this.observe(prop, update);
+      update();
+    });
+    // :bind:style="condition,display:none" style="display:inline"
+    node.querySelectorAll('[\\:else]').forEach(el => {
+      el = this.reactive(node, el);
+      const prop = el.node().attributes[':else'].value.trim(),
+        content = el.node().outerHTML,
+        update = () => {
+          if (!el.node()) return;
+          const val = this.get(this._proxied, prop);
+          el.node().outerHTML = (val.length
+          ? val.length
+          : val == true)
+            ? `<span _id="${el.id}"></span>`
+            : content;
+          this.parseDOM(el.node());
+        };
+      if (!el.node().attributes[':unbound']) this.observe(prop, update);
+      update();
+    });
 
     // restore preserved elems
     node
       .querySelectorAll('[\\:pre]')
-      .forEach(el => (el.outerHTML = parent._preserve[parent.eID(el)]));
+      .forEach(el => (el.outerHTML = this._preserve[this.eID(el)]));
   }
 }

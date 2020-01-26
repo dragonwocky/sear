@@ -2,9 +2,9 @@
 
 ## [todo]
 
-- scoping issues need fixing (use static property with IDs stored, similar behaviour to :pre?)
+- scoping is weird, needs fixing (use static property with IDs stored, similar behaviour to :pre?)
 - ^ if successful, could allow simple implementation of
-  components-style feature
+  components-style feature.
 
 - limitation: moustache syntax works only for props / cannot be evaluated.
   not a major issue, as computed properties can be used instead. however,
@@ -18,7 +18,6 @@
   has been commented out due to a) it's buggy with contenteditable -
   which, hey, why are you using anyway, but b) when would you even
   practically need this capability?
-
 - limitation: can only handle certain data types. do i bother
   adding support for more? i don't see any reason to (how would parsing to html work?)
 
@@ -26,13 +25,13 @@ note to self: this is growing, need to start optimising some code.
 
 ## [0.5] / (unreleased)
 
-format change: persisted data -> `data.client` (inc. move of `persist` -> `format.name`)
+- format change: persisted data -> `data.client` (inc. move of `persist` -> `format.name`)
+- :bind:attr now uses `=` rather than `,`
+- improve caching managment of computed props
+- unbreak element binding when element no longer exists
+- improvements of helper functions (e.g. `isEqual` -> `compare`)
 
-improve caching managment of computed props
-
-unbreak element binding when element no longer exists
-
-improvements of helper functions (e.g. `isEqual` -> `compare`)
+site update! dark theme
 
 ## [0.4.3] / (2020-01-13)
 

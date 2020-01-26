@@ -135,7 +135,7 @@ as arrow functions! (arrow functions break persistence and accessing `this`)
 > use `app.value` rather than `app.value()`.
 
 ```js
-data.client: {
+data: {
   redselected() {
     return this['client']selected === 'red';
   },
@@ -247,9 +247,7 @@ use if you want to preserve everything within that tag -
 content will not be modified/updated in any way.
 
 ```html
-<p :pre>
-  these {{ tags }} will <span :text="client.paragraph">not</span> be parsed!
-</p>
+<p :pre>these {{ tags }} will <span :text="client.paragraph">not</span> be parsed!</p>
 ```
 
 #### :each
@@ -301,23 +299,23 @@ relevant prop has a falsy value.
 
 use to reactively update/bind any attribute value.
 
-values are separated by spaces, written as `condition,response`.
+values are separated by spaces, written as `condition=response`.
 if there is no `response`, it will be assumed to be the value of `condition`.
 
 if the attribute is boolean, then a truthy `condition` will result in the
 presence of the attribute. a falsy `condition` will result in the removal of
-the attribute. to inverse this, do `condition,false`.
+the attribute. to inverse this, do `condition=false`.
 
 > this is only 1 way (it does not sync).
 > for the `checked` attribute of checkboxes, use `:value` instead.
 
 ```html
 <p>
-  <input type="checkbox" :bind:disabled="client.redselected,false" disabled />
+  <input type="checkbox" :bind:disabled="client.redselected=false" disabled />
   <span>(will be disabled if red is not selected)</span>
 </p>
 
-<p :bind:style="client.colour">i'm {{ client.selected }}</p>
+<p :bind:style="colour">i'm {{ client.selected }}</p>
 ```
 
 ## license
