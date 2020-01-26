@@ -13,10 +13,10 @@ when building your web app, there are 4 main data sets you deal with.
 - client-stored / anything persisted on the client side (e.g. localStorage)
 - server-stored / data gained from interactions with the server.
 
-Sear doesn't touch anything to do with the server. there're so many ways data
+sear doesn't touch anything to do with the server. there're so many ways data
 transfer between the server and client can be implemented, that's best left to you.
 
-the other 3? Sear takes them all, and gives one single object to interact with
+the other 3? sear takes them all, and gives one single object to interact with
 (from above, script data). you update data within that object, and the other two
 (visible + client-stored) reactively update accordingly (if necessary).
 
@@ -34,7 +34,7 @@ to fit everything together. it comes with functionality that does the job withou
 to do any more.
 
 if you do want something like that, check out [Vue.js](https://vuejs.org/) or
-[Svelte](https://svelte.dev/). otherwise, give Sear a try. it has some decent
+[Svelte](https://svelte.dev/). otherwise, give this a try. it has some decent
 capabilities, and does the job well enough.
 
 ## docs / features
