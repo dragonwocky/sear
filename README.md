@@ -1,6 +1,6 @@
 # Sear
 
-a lightweight (~9 KB minified), reactive data system.
+a lightweight, reactive data system
 
 [![](https://img.shields.io/github/v/release/dragonwocky/sear)](https://github.com/dragonwocky/sear/releases/latest)
 [![](https://img.shields.io/github/license/dragonwocky/sear?color=884ea0)](https://github.com/dragonwocky/sear/blob/master/LICENSE)

@@ -113,8 +113,10 @@ body {
   font-size: 1em;
   width: 70%;
 }
-.links {
+.links,
+.badges {
   margin: 1.3em 0;
+  text-align: center;
 }
 .links a {
   padding: 0 0.25em;
@@ -125,9 +127,6 @@ body {
 }
 .links a:not(:last-child) {
   border-right: 0.1em solid var(--colour);
-}
-.tags {
-  text-align: center;
 }
 
 .description {
