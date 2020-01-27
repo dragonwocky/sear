@@ -106,32 +106,28 @@ body {
   flex-direction: column;
 }
 
-.subtitle {
+.subtitle,
+.links {
   margin: 0.1em;
   text-align: center;
   font-size: 1em;
   width: 70%;
 }
-.subtitle:first-of-type {
+.links {
   margin: 1.3em 0;
 }
-.subtitle a {
+.links a {
   padding: 0 0.25em;
   font-weight: var(--menu-weight);
 }
-.subtitle a:not(:first-child) {
+.links a:not(:first-child) {
   margin-left: 0.25em;
 }
-.subtitle a:not(:last-child) {
+.links a:not(:last-child) {
   border-right: 0.1em solid var(--colour);
 }
-
-.production-ready {
-  font-size: 0.9em;
-  padding: 0.4em 0.7em;
-  border: 1px solid;
-  font-style: italic;
-  font-weight: 100;
+.tags {
+  text-align: center;
 }
 
 .description {

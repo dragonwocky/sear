@@ -2,7 +2,15 @@
 
 a lightweight (~9 KB minified), reactive data system.
 
-_not production ready_
+[![](https://img.shields.io/github/v/release/dragonwocky/sear)](https://github.com/dragonwocky/sear/releases/latest)
+[![](https://img.shields.io/github/license/dragonwocky/sear?color=884ea0)](https://github.com/dragonwocky/sear/blob/master/LICENSE)
+[![](https://img.shields.io/github/downloads/dragonwocky/sear/total?color=f1c40f)](https://github.com/dragonwocky/sear/releases/latest)
+
+[![](https://img.shields.io/github/size/dragonwocky/sear/sear.0.5.js?label=size&color=brightgreen)](https://github.com/dragonwocky/sear/blob/master/sear.0.5.js)
+[![](https://img.shields.io/github/size/dragonwocky/sear/sear.0.5.min.js?label=minified&color=brightgreen)](https://github.com/dragonwocky/sear/blob/master/sear.0.5.min.js)
+[![](https://img.badgesize.io/https://dragonwocky.me/sear/sear.0.5.min.js?compression=gzip&label=minified%20%2B%20gzip)](https://github.com/dragonwocky/sear/blob/master/sear.0.5.min.js)
+
+![](https://img.shields.io/badge/production%20ready-no-b20000)
 
 ## a what?
 
