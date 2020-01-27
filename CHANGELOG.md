@@ -23,7 +23,7 @@
 
 note to self: this is growing, need to start optimising some code.
 
-## [0.5] / (unreleased)
+## [0.5] / (2020-01-27)
 
 - format change: persisted data -> `data.client` (inc. move of `persist` -> `format.name`)
 - :bind:attr now uses `=` rather than `,`
