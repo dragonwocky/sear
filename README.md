@@ -6,9 +6,9 @@ a lightweight, reactive data system
 [![](https://img.shields.io/github/license/dragonwocky/sear?color=884ea0)](https://github.com/dragonwocky/sear/blob/master/LICENSE)
 [![](https://img.shields.io/github/downloads/dragonwocky/sear/total?color=f1c40f)](https://github.com/dragonwocky/sear/releases/latest)
 
-[![](https://img.shields.io/github/size/dragonwocky/sear/sear.0.5.js?label=size&color=brightgreen)](https://github.com/dragonwocky/sear/blob/master/sear.0.5.js)
-[![](https://img.shields.io/github/size/dragonwocky/sear/sear.0.5.min.js?label=minified&color=brightgreen)](https://github.com/dragonwocky/sear/blob/master/sear.0.5.min.js)
-[![](https://img.badgesize.io/https://dragonwocky.me/sear/sear.0.5.min.js?compression=gzip&label=minified%20%2B%20gzip)](https://github.com/dragonwocky/sear/blob/master/sear.0.5.min.js)
+[![](https://img.shields.io/github/size/dragonwocky/sear/sear.js?label=size&color=brightgreen)](https://github.com/dragonwocky/sear/blob/master/sear.js)
+[![](https://img.shields.io/github/size/dragonwocky/sear/sear.min.js?label=minified&color=brightgreen)](https://github.com/dragonwocky/sear/blob/master/sear.min.js)
+[![](https://img.badgesize.io/https://dragonwocky.me/sear/sear.min.js?compression=gzip&label=minified%20%2B%20gzip)](https://github.com/dragonwocky/sear/blob/master/sear.min.js)
 
 ![](https://img.shields.io/badge/production%20ready-no-b20000)
 
@@ -51,11 +51,11 @@ capabilities, and does the job well enough.
 
 #### app declaration
 
-include the file! either download the file from [here](https://github.com/dragonwocky/sear/releases/download/v0.5/sear.0.5.js)
-and include in your own assets, or source it from `https://dragonwocky.me/sear/sear.0.5.min.js`.
+include the file! either download the file from [here](https://github.com/dragonwocky/sear/releases/download/v0.5.1/sear.0.5.1.js)
+and include in your own assets, or source it from `https://dragonwocky.me/sear/sear.min.js`. To access a specific version, use `https://dragonwocky.me/sear/dist/sear.<version-number>.js` (replacing `<version-number>` with e.g. `0.5.1`>).
 
 ```html
-<script src="https://dragonwocky.me/sear/sear.0.5.min.js"></script>
+<script src="https://dragonwocky.me/sear/sear.min.js"></script>
 ```
 
 initialise.

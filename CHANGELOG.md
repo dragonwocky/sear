@@ -23,6 +23,14 @@
 
 note to self: this is growing, need to start optimising some code.
 
+## [0.5.1] / (2020-01-29)
+
+variable reference typo fix of `val` -> `value` in `:each` handler
+
+site/delivery updates:
+- latest from `sear.min.js`, specific version from `dist/sear.<version-number>.min.js`
+- compression now includes mangling, so file size is even smaller
+
 ## [0.5] / (2020-01-27)
 
 - format change: persisted data -> `data.client` (inc. move of `persist` -> `format.name`)
