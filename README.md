@@ -52,7 +52,7 @@ capabilities, and does the job well enough.
 #### app declaration
 
 include the file! either download the file from [here](https://github.com/dragonwocky/sear/releases/download/v0.5.1/sear.0.5.1.js)
-and include in your own assets, or source it from `https://dragonwocky.me/sear/sear.min.js`. To access a specific version, use `https://dragonwocky.me/sear/dist/sear.<version-number>.js` (replacing `<version-number>` with e.g. `0.5.1`>).
+and include in your own assets, or source it from `https://dragonwocky.me/sear/sear.min.js`. To access a specific version, use `https://dragonwocky.me/sear/dist/sear.<version-number>.js` (replacing `<version-number>` with e.g. `0.5.1`).
 
 ```html
 <script src="https://dragonwocky.me/sear/sear.min.js"></script>
