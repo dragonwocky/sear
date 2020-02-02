@@ -23,7 +23,7 @@
 
 note to self: this is growing, need to start optimising some code.
 
-## [0.5.2] / (2020-02-01)
+## [0.5.2] / (2020-02-02)
 
 update syntax to not break when compressed
 
