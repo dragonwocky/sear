@@ -23,6 +23,12 @@
 
 note to self: this is growing, need to start optimising some code.
 
+## [0.5.3] / (2020-02-03)
+
+make compression/delivery script more comprehensive/capable
+
+(inc. fixing more compression-incompatible syntax bugs i'd missed)
+
 ## [0.5.2] / (2020-02-02)
 
 update syntax to not break when compressed

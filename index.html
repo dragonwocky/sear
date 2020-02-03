@@ -38,7 +38,7 @@ Sear.js Documentation
 
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
-    <script src="sear.0.5.2.min.js"></script>
+    <script src="sear.min.js"></script>
     <script>
       const app = new Sear({
         el: '#app',
@@ -80,13 +80,9 @@ Sear.js Documentation
               return true;
             });
             if (flavours.length) {
-              console.log(
-                `[watcher] flavour(s) added: &lt;${flavours.join('&gt; &lt;')}&gt;`
-              );
+              console.log(`[watcher] flavour(s) added: <<${flavours.join('>> <<')}>>`);
             } else if (prev.length)
-              console.log(
-                `[watcher] flavour(s) removed: &lt;${prev.join('&gt; &lt;')}&gt;`
-              );
+              console.log(`[watcher] flavour(s) removed: <<${prev.join('>> <<')}>>`);
           }
         }
       });
@@ -118,7 +114,7 @@ Sear.js Documentation
           Changelog
         </a>
         <a
-          href="https://github.com/dragonwocky/sear/releases/download/v0.5.2/sear.0.5.2.js"
+          href="https://github.com/dragonwocky/sear/releases/download/v0.5.3/sear.0.5.3.js"
         >
           Download
         </a>
@@ -220,7 +216,7 @@ Sear.js Documentation
           <p>
             include the file! either download the file from
             <a
-              href="https://github.com/dragonwocky/sear/releases/download/v0.5.2/sear.0.5.2.js"
+              href="https://github.com/dragonwocky/sear/releases/download/v0.5.3/sear.0.5.3.js"
               >here</a
             >
             and include in your own assets, or source it from
@@ -229,7 +225,8 @@ Sear.js Documentation
             <code class="nohighlight"
               >https://dragonwocky.me/sear/dist/sear.&lt;version-number&gt;.js`</code
             >
-            (replacing <code class="nohighlight">&lt;version-number&gt;</code> with e.g. <code class="nohighlight">0.5.2</code>).
+            (replacing <code class="nohighlight">&lt;version-number&gt;</code> with e.g.
+            <code class="nohighlight">0.5.3</code>).
           </p>
           <pre><code class="html">&lt;script src="https://dragonwocky.me/sear/sear.min.js"&gt;&lt;/script&gt;</code></pre>
           <p>initialise.</p>
@@ -353,9 +350,9 @@ app['client'].paragraph = `this is &lt;b&gt;bold&lt;/b&gt;.
         return true;
       });
     if (flavours.length) {
-      console.log(`[watcher] flavour(s) added: &lt;${flavours.join('&gt; &lt;')}&gt;`);
+      console.log(`[watcher] flavour(s) added: &lt;&lt;${flavours.join('&gt;&gt; &lt;&lt;')}&gt;&gt;`);
     } else if (prev.length)
-      console.log(`[watcher] flavour(s) removed: &lt;${prev.join('&gt; &lt;')}&gt;`);
+      console.log(`[watcher] flavour(s) removed: &lt;&lt;${prev.join('&gt;&gt; &lt;&lt;')}&gt;&gt;`);
   }
 }</code></pre>
         </section>

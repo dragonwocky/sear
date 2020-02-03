@@ -1,5 +1,5 @@
 /*
- * Sear.js v0.5.2
+ * Sear.js v0.5.3
  * (c) 2020 dragonwocky <thedragonring.bod@gmail.com>
  * (https://dragonwocky.me/) under the MIT License
  */
@@ -10,7 +10,7 @@ class Sear {
     this._format = {};
     if (options.format.version) {
       this._format = {
-        version: options.format.version,
+        'version': options.format.version,
         handler:
           options.format['handler'] ||
           function() {
@@ -20,7 +20,7 @@ class Sear {
     }
     if (options.format.name) this._format.name = options.format.name;
     this._raw = this.deepmerge(options.data, {
-      client: this.retrieve(this._format.name)
+      'client': this.retrieve(this._format.name)
     });
     this._cache = this.clone(this._raw, [['function', () => undefined]]);
 
@@ -111,7 +111,7 @@ class Sear {
     document.addEventListener('DOMContentLoaded', () => {
       if ('el' in options) {
         if (
-          typeof options.el === 'string' &&
+          typeof options['el'] === 'string' &&
           options.el.startsWith('#') &&
           !options.el.includes(' ')
         ) {
@@ -189,27 +189,25 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
 
   persist(ident, store) {
     if (!ident) return false;
-    const data = this.clone(store).client,
-      computed = {},
+    const parsed = {
+        'data': this.clone(store).client,
+        'computed': {}
+      },
       process = (obj, path = []) => {
         Object.keys(obj)
           .filter(key => typeof obj[key] === 'object')
           .forEach(key => {
-            this.set(computed, [...path, key], {});
+            this.set(parsed.computed, [...path, key], {});
             process(obj[key], [...path, key]);
           });
         Object.keys(obj)
           .filter(key => typeof obj[key] === 'function')
           .forEach(key => {
-            this.set(computed, [...path, key], obj[key]);
+            this.set(parsed.computed, [...path, key], obj[key]);
             delete obj[key];
           });
       };
-    process(data);
-    const parsed = {
-      data,
-      computed
-    };
+    process(parsed.data);
     if ('version' in this._format) parsed.version = this._format.version;
     return (localStorage[ident] = JSON.stringify(parsed));
   }
@@ -218,8 +216,8 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
     try {
       store = JSON.parse(localStorage[store] || '{}');
       if (store && typeof store === 'object') {
-        store.data = store.data || {};
-        store.computed = store.computed || {};
+        store['data'] = store.data || {};
+        store['computed'] = store.computed || {};
         const process = (obj, path = []) => {
           Object.keys(obj).forEach(key => {
             if (typeof obj[key] === 'object') return process(obj[key], [...path, key]);
@@ -245,8 +243,9 @@ Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Nu
         };
         process(store.computed);
         const parsed = this.deepmerge(store.data, store.computed);
-        if (store.version !== this._format.version) return this._format.handler(parsed);
-        return parsed;
+        return store.version !== this._format.version
+          ? this._format.handler(parsed)
+          : parsed;
       }
     } catch (e) {
       return {};
