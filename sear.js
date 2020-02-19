@@ -1,5 +1,5 @@
 /*
- * Sear.js v0.5.3
+ * Sear.js v0.5.4
  * (c) 2020 dragonwocky <thedragonring.bod@gmail.com>
  * (https://dragonwocky.me/) under the MIT License
  */
@@ -8,7 +8,7 @@
 class Sear {
   constructor(options) {
     this._format = {};
-    if (options.format.version) {
+    if (options.format && options.format.version) {
       this._format = {
         'version': options.format.version,
         handler:
@@ -73,7 +73,7 @@ class Sear {
     this._watchers = options.watch || {};
     for (let key in this._watchers) {
       if (typeof this._watchers[key] != 'function')
-        throw new Error(`[Sear] Watchers must be functions! Offender: <${key}>`);
+        throw new Error(`[Sear] Watchers must be functions! Offender: <<${key}>>`);
       this.observe(key, this._watchers[key].bind(this._proxied));
       this.get(this._proxied, key);
     }
@@ -117,11 +117,11 @@ class Sear {
         ) {
           this._frame = document.getElementById(options.el.slice(1));
           if (!this._frame)
-            throw new Error(`[Sear] Element <${options.el}> does not exist!`);
+            throw new Error(`[Sear] Element <<${options.el}>> does not exist!`);
         }
         if (!this._frame)
           throw new Error(
-            `[Sear] Element <${options.el}> is invalid!
+            `[Sear] Element <<${options.el}>> is invalid!
 Element must be passed as a single ID in a string (e.g. '#app').`
           );
       } else this._frame = document.body;
@@ -182,7 +182,7 @@ Element must be passed as a single ID in a string (e.g. '#app').`
       return copy;
     }
     throw new Error(
-      `[Sear] <${obj.constructor.name}> is an unsupported data type!\n
+      `[Sear] <<${obj.constructor.name}>> is an unsupported data type!\n
 Supported data types are: (Basic) Objects, Functions, Arrays, Dates, Strings, Numbers, and Booleans.\n`
     );
   }

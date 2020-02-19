@@ -23,6 +23,10 @@
 
 note to self: this is growing, need to start optimising some code.
 
+## [0.5.4] / (2020-02-19)
+
+quickfix: don't error if no format is provided
+
 ## [0.5.3] / (2020-02-03)
 
 make compression/delivery script more comprehensive/capable

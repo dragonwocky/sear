@@ -10,10 +10,10 @@ for file in *.js; do
      *) raw=$file
         version=${file#sear.}
         license="/*
-  * Sear.js ${version%.js}
-  * (c) 2020 dragonwocky <thedragonring.bod@gmail.com>
-  * (https://dragonwocky.me/) under the MIT License
-  */
+ * Sear.js ${version%.js}
+ * (c) 2020 dragonwocky <thedragonring.bod@gmail.com>
+ * (https://dragonwocky.me/) under the MIT License
+ */
 
 "
         parsed="$license$($NVM_BIN/../lib/node_modules/terser/bin/terser ${file} -c -m --mangle-props keep_quoted)"
