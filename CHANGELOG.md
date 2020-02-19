@@ -23,6 +23,13 @@
 
 note to self: this is growing, need to start optimising some code.
 
+## [0.5.5] / (2020-02-19)
+
+...did not realise i had made the same mistake multiple times.
+the fix of 0.5.4 was too quick. again, stopped erroring if fields weren't provided.
+
+(more of these type of fixes are likely to be required at some point, but not tonight.)
+
 ## [0.5.4] / (2020-02-19)
 
 quickfix: don't error if no format is provided
@@ -46,7 +53,7 @@ site/delivery updates:
 - latest from `sear.min.js`, specific version from `dist/sear.<version-number>.min.js`
 - compression now includes mangling, so file size is even smaller
 
-## [0.5] / (2020-01-27)
+## [0.5.0] / (2020-01-27)
 
 - format change: persisted data -> `data.client` (inc. move of `persist` -> `format.name`)
 - :bind:attr now uses `=` rather than `,`
@@ -92,18 +99,18 @@ brief summary of features:
 - bindings = `:html`, `:text`, `{{ moustache }}` (equiv to `:text`), `:value`, `:unbound`,
   `:pre`, `:each`, `:if`, `:else`, `:bind:attr`
 
-## [0.3]
+## [0.3.0]
 
 wow these getters and setters are really limiting.
 wait there's something else called proxies? cool.
 time to rebuild with proxies and make everything better.
 
-## [0.2]
+## [0.2.0]
 
 got rid of some stuff that didn't work.
 semi-rewrote things? at least reorganised. it was progress.
 
-## [0.1]
+## [0.1.0]
 
 idk some things worked some things didn't.
 still figuring out how the whole concept of reactivity works.
